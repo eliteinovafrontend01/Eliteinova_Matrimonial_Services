@@ -1,15 +1,19 @@
+// src/data/admin/bookings.js
 export const allBookingsData = [
-  { id: 'BK001', customer: 'Aarav Patel', service: 'Photography', vendor: 'LensArt Studio', bookingDate: '10 Jan 2024', eventDate: '15 Mar 2024', status: 'Completed', payment: 'Paid', amount: '₹45,000' },
-  { id: 'BK002', customer: 'Ishita Reddy', service: 'Catering', vendor: 'Royal Feast', bookingDate: '20 Feb 2024', eventDate: '25 Apr 2024', status: 'Confirmed', payment: 'Partial', amount: '₹1,20,000' },
-  { id: 'BK003', customer: 'Rohan Deshmukh', service: 'Decoration', vendor: 'Dream Decor', bookingDate: '1 Mar 2024', eventDate: '10 May 2024', status: 'Pending', payment: 'Pending', amount: '₹65,000' },
-  { id: 'BK004', customer: 'Neha Gupta', service: 'Venue', vendor: 'Grand Palace', bookingDate: '5 Apr 2024', eventDate: '20 Jun 2024', status: 'In Progress', payment: 'Paid', amount: '₹3,50,000' },
-  { id: 'BK005', customer: 'Vikram Singh', service: 'Makeup', vendor: 'Glam Studio', bookingDate: '12 Apr 2024', eventDate: '5 Jul 2024', status: 'Cancelled', payment: 'Refunded', amount: '₹18,000' },
-  { id: 'BK006', customer: 'Meera Nair', service: 'Photography', vendor: 'Shutter Stories', bookingDate: '18 Apr 2024', eventDate: '12 Aug 2024', status: 'Confirmed', payment: 'Paid', amount: '₹55,000' },
-  { id: 'BK007', customer: 'Arjun Mehta', service: 'Entertainment', vendor: 'DJ Rhythm Pro', bookingDate: '22 Apr 2024', eventDate: '1 Sep 2024', status: 'Pending', payment: 'Pending', amount: '₹30,000' },
-  { id: 'BK008', customer: 'Priya Sharma', service: 'Catering', vendor: "Nawab's Kitchen", bookingDate: '28 Apr 2024', eventDate: '15 Sep 2024', status: 'In Progress', payment: 'Partial', amount: '₹2,10,000' },
+  { id: 'BK-001', customer: 'John Doe', service: 'Wedding Photography', vendor: 'Sarah Photography', bookingDate: '2024-01-15', eventDate: '2024-02-20', status: 'Confirmed', payment: 'Paid', amount: '₹15,000' },
+  { id: 'BK-002', customer: 'Jane Smith', service: 'Birthday Party', vendor: 'Event Masters', bookingDate: '2024-01-16', eventDate: '2024-02-25', status: 'Pending', payment: 'Partial', amount: '₹8,000' },
+  { id: 'BK-003', customer: 'Mike Johnson', service: 'Corporate Event', vendor: 'Corporate Solutions', bookingDate: '2024-01-14', eventDate: '2024-02-18', status: 'In Progress', payment: 'Pending', amount: '₹25,000' },
+  { id: 'BK-004', customer: 'Sarah Williams', service: 'Wedding Catering', vendor: 'Gourmet Delights', bookingDate: '2024-01-13', eventDate: '2024-02-22', status: 'Completed', payment: 'Paid', amount: '₹30,000' },
+  { id: 'BK-005', customer: 'Robert Brown', service: 'Conference Setup', vendor: 'Tech Events', bookingDate: '2024-01-12', eventDate: '2024-02-19', status: 'Cancelled', payment: 'Refunded', amount: '₹12,000' },
+  { id: 'BK-006', customer: 'Emily Davis', service: 'Birthday Party', vendor: 'Party Planners', bookingDate: '2024-01-17', eventDate: '2024-02-28', status: 'Confirmed', payment: 'Paid', amount: '₹10,000' },
+  { id: 'BK-007', customer: 'David Wilson', service: 'Wedding Photography', vendor: 'Sarah Photography', bookingDate: '2024-01-18', eventDate: '2024-03-01', status: 'Pending', payment: 'Partial', amount: '₹20,000' },
 ];
 
-export const bookingsData = [
-  { id: 'BK001', customer: 'Aarav Patel', service: 'Photography', vendor: 'LensArt Studio', bookingDate: '10 Jan 2024', eventDate: '15 Mar 2024', status: 'Completed', payment: 'Paid', amount: '₹45,000' },
-  { id: 'BK002', customer: 'Ishita Reddy', service: 'Catering', vendor: 'Royal Feast', bookingDate: '20 Feb 2024', eventDate: '25 Apr 2024', status: 'Confirmed', payment: 'Partial', amount: '₹1,20,000' },
+export const availableVendors = [
+  { id: 1, name: 'Sarah Photography', category: 'Photography', location: 'Mumbai', rating: 4.8, available: true, price: '₹15,000' },
+  { id: 2, name: 'Event Masters', category: 'Event Planning', location: 'Mumbai', rating: 4.6, available: true, price: '₹20,000' },
+  { id: 3, name: 'Corporate Solutions', category: 'Corporate Events', location: 'Pune', rating: 4.9, available: false, price: '₹30,000' },
+  { id: 4, name: 'Gourmet Delights', category: 'Catering', location: 'Mumbai', rating: 4.7, available: true, price: '₹25,000' },
+  { id: 5, name: 'Party Planners', category: 'Event Planning', location: 'Mumbai', rating: 4.5, available: true, price: '₹12,000' },
+  { id: 6, name: 'Tech Events', category: 'Technical', location: 'Pune', rating: 4.8, available: true, price: '₹18,000' },
 ];

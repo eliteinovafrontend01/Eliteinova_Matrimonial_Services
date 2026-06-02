@@ -3,23 +3,13 @@ import { Icon } from '../shared/Icon';
 import { BookingBadge } from '../shared/BookingBadge';
 import { PaymentBadge } from '../shared/PaymentBadge';
 import { FeatureCard } from '../shared/FeatureCard';
+import { allBookingsData } from '../../../data/admin/bookings';
 import { ICONS } from '../../../constants/admin/icons';
 
-export const BookingManagementPage = () => {
+export const BookingManagementPage = ({ onSelectBooking }) => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [search, setSearch] = useState('');
-
-  const bookingsData = [
-    { id: 'BK001', customer: 'Aarav Patel', service: 'Photography', vendor: 'LensArt Studio', bookingDate: '10 Jan 2024', eventDate: '15 Mar 2024', location: 'Mumbai', amount: '₹45,000', status: 'Completed', payment: 'Paid' },
-    { id: 'BK002', customer: 'Ishita Reddy', service: 'Catering', vendor: 'Royal Feast', bookingDate: '20 Feb 2024', eventDate: '25 Apr 2024', location: 'Delhi', amount: '₹1,20,000', status: 'Confirmed', payment: 'Partial' },
-    { id: 'BK003', customer: 'Rohan Deshmukh', service: 'Decorations', vendor: 'Dream Decor', bookingDate: '1 Mar 2024', eventDate: '10 May 2024', location: 'Chennai', amount: '₹65,000', status: 'Pending', payment: 'Pending' },
-    { id: 'BK004', customer: 'Neha Gupta', service: 'Wedding Halls', vendor: 'Grand Palace', bookingDate: '5 Apr 2024', eventDate: '20 Jun 2024', location: 'Bangalore', amount: '₹3,50,000', status: 'In Progress', payment: 'Paid' },
-    { id: 'BK005', customer: 'Vikram Singh', service: 'Bridal Styling', vendor: 'Glam Studio', bookingDate: '12 Apr 2024', eventDate: '5 Jul 2024', location: 'Pune', amount: '₹18,000', status: 'Cancelled', payment: 'Refunded' },
-    { id: 'BK006', customer: 'Meera Nair', service: 'Photography', vendor: 'Shutter Stories', bookingDate: '18 Apr 2024', eventDate: '12 Aug 2024', location: 'Hyderabad', amount: '₹55,000', status: 'Confirmed', payment: 'Paid' },
-    { id: 'BK007', customer: 'Arjun Mehta', service: 'Entertainment', vendor: 'DJ Rhythm Pro', bookingDate: '22 Apr 2024', eventDate: '1 Sep 2024', location: 'Mumbai', amount: '₹30,000', status: 'Pending', payment: 'Pending' },
-    { id: 'BK008', customer: 'Priya Sharma', service: 'Catering', vendor: "Nawab's Kitchen", bookingDate: '28 Apr 2024', eventDate: '15 Sep 2024', location: 'Lucknow', amount: '₹2,10,000', status: 'In Progress', payment: 'Partial' },
-  ];
-
+  
   const statCards = [
     { label: 'Total Bookings', value: '10,843', icon: '📋', color: 'border-blue-400', filter: 'All' },
     { label: 'Pending', value: '47', icon: '⏳', color: 'border-amber-400', filter: 'Pending' },
@@ -28,8 +18,8 @@ export const BookingManagementPage = () => {
     { label: 'Completed', value: '7,436', icon: '🎉', color: 'border-emerald-400', filter: 'Completed' },
     { label: 'Cancelled', value: '203', icon: '❌', color: 'border-red-400', filter: 'Cancelled' },
   ];
-
-  const filtered = bookingsData.filter(b => {
+  
+  const filtered = allBookingsData.filter(b => {
     const matchStatus = activeFilter === 'All' || b.status === activeFilter;
     const matchSearch = !search || 
       b.customer.toLowerCase().includes(search.toLowerCase()) || 
@@ -39,14 +29,14 @@ export const BookingManagementPage = () => {
       b.location.toLowerCase().includes(search.toLowerCase());
     return matchStatus && matchSearch;
   });
-
+  
   const featureCards = [
     { emoji: '📊', title: 'Booking Overview Dashboard', accentColor: 'bg-blue-50', points: ['View all bookings with key details', 'Customer name & service type', 'Vendor assignment tracking', 'Booking date & event date view'] },
     { emoji: '🔄', title: 'Status Management', accentColor: 'bg-amber-50', points: ['Update booking status in real-time', 'Track Pending → Confirmed → In Progress → Completed', 'Handle cancellations properly', 'Automated status notifications'] },
     { emoji: '👥', title: 'Vendor Assignment', accentColor: 'bg-green-50', points: ['Assign vendors based on availability', 'Location & service requirement matching', 'Conflict-free scheduling', 'Calendar management integration'] },
     { emoji: '💰', title: 'Payment & Refund Tracking', accentColor: 'bg-purple-50', points: ['Monitor paid/partial/pending status', 'Refund processing for cancellations', 'Invoice & billing management', 'Complete transaction history'] }
   ];
-
+  
   return (
     <div>
       <div className="rounded-2xl p-6 mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
@@ -58,7 +48,7 @@ export const BookingManagementPage = () => {
           </div>
         </div>
       </div>
-
+      
       <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
         {statCards.map((s, i) => (
           <div key={i} onClick={() => setActiveFilter(s.filter)}
@@ -74,7 +64,7 @@ export const BookingManagementPage = () => {
           </div>
         ))}
       </div>
-
+      
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
         <div className="p-5 border-b border-gray-100">
           <div className="flex items-center justify-between mb-4">
@@ -115,7 +105,7 @@ export const BookingManagementPage = () => {
             ))}
           </div>
         </div>
-
+        
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -127,36 +117,49 @@ export const BookingManagementPage = () => {
             </thead>
             <tbody className="divide-y divide-gray-50">
               {filtered.length === 0 ? (
-                <tr><td colSpan={11} className="px-4 py-12 text-center text-sm text-gray-400">No bookings found for "{activeFilter}" filter. </td></tr>
-              ) : filtered.map(b => (
-                <tr key={b.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 text-xs font-mono text-gray-500">{b.id}</td>
-                  <td className="px-4 py-3 text-sm font-semibold text-gray-700 whitespace-nowrap">{b.customer}</td>
-                  <td className="px-4 py-3"><span className="text-xs font-semibold bg-red-50 text-red-700 px-2 py-0.5 rounded-lg">{b.service}</span></td>
-                  <td className="px-4 py-3 text-xs text-gray-600 whitespace-nowrap">{b.vendor}</td>
-                  <td className="px-4 py-3 text-xs text-gray-500">{b.location}</td>
-                  <td className="px-4 py-3 text-xs text-gray-400 whitespace-nowrap">{b.bookingDate}</td>
-                  <td className="px-4 py-3 text-xs font-semibold text-gray-700 whitespace-nowrap">{b.eventDate}</td>
-                  <td className="px-4 py-3 text-xs font-bold text-gray-800">{b.amount}</td>
-                  <td className="px-4 py-3"><BookingBadge status={b.status} /></td>
-                  <td className="px-4 py-3"><PaymentBadge status={b.payment} /></td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-1.5">
-                      <button onClick={() => alert(`View booking ${b.id}`)} className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-500">
-                        <Icon d={ICONS.eye} size={14} />
-                      </button>
-                      <button onClick={() => alert(`Edit booking ${b.id}`)} className="p-1.5 rounded-lg hover:bg-amber-50 text-amber-500">
-                        <Icon d={ICONS.edit} size={14} />
-                      </button>
-                    </div>
-                  </td>
+                <tr>
+                  <td colSpan={11} className="px-4 py-12 text-center text-sm text-gray-400">No bookings found for "{activeFilter}" filter.</td>
                 </tr>
-              ))}
+              ) : (
+                filtered.map(b => (
+                  <tr key={b.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-3 text-xs font-mono text-gray-500">{b.id}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-gray-700 whitespace-nowrap">{b.customer}</td>
+                    <td className="px-4 py-3"><span className="text-xs font-semibold bg-red-50 text-red-700 px-2 py-0.5 rounded-lg">{b.service}</span></td>
+                    <td className="px-4 py-3 text-xs text-gray-600 whitespace-nowrap">{b.vendor}</td>
+                    <td className="px-4 py-3 text-xs text-gray-500">{b.location}</td>
+                    <td className="px-4 py-3 text-xs text-gray-400 whitespace-nowrap">{b.bookingDate}</td>
+                    <td className="px-4 py-3 text-xs font-semibold text-gray-700 whitespace-nowrap">{b.eventDate}</td>
+                    <td className="px-4 py-3 text-xs font-bold text-gray-800">{b.amount}</td>
+                    <td className="px-4 py-3"><BookingBadge status={b.status} /></td>
+                    <td className="px-4 py-3"><PaymentBadge status={b.payment} /></td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1.5">
+                        <button onClick={() => onSelectBooking && onSelectBooking(b)} className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-500">
+                          <Icon d={ICONS.eye} size={14} />
+                        </button>
+                        <button onClick={() => alert(`Edit booking ${b.id}`)} className="p-1.5 rounded-lg hover:bg-amber-50 text-amber-500">
+                          <Icon d={ICONS.edit} size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+        
+        <div className="px-5 py-3 border-t border-gray-100 flex items-center justify-between">
+          <p className="text-xs text-gray-400">Showing {filtered.length} of {allBookingsData.length} bookings</p>
+          <div className="flex items-center gap-1">
+            {[1,2,3,'...',1084].map((p, i) => (
+              <button key={i} className={`w-7 h-7 text-xs rounded-lg font-semibold ${p === 1 ? 'bg-red-600 text-white' : 'text-gray-500 hover:bg-gray-100'}`}>{p}</button>
+            ))}
+          </div>
+        </div>
       </div>
-
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {featureCards.map((c, i) => <FeatureCard key={i} {...c} />)}
       </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DashboardOverview } from './dashboard/DashboardOverview';
 import { CustomerManagementPage } from './customers/CustomerManagement';
 import { ViewAllCustomers } from './customers/ViewAllCustomers';
@@ -27,7 +27,22 @@ import { BusinessLicensePage } from './vendors/verification/BusinessLicensePage'
 import { GSTVerificationPage } from './vendors/verification/GSTVerificationPage';
 import { IDProofVerificationPage } from './vendors/verification/IDProofVerificationPage';
 import { VerifiedVendorBadgePage } from './vendors/verification/VerifiedVendorBadgePage';
+
+// Booking Management Pages - Using relative paths from current directory
 import { BookingManagementPage } from './bookings/BookingManagementPage';
+import { BookingDetailsPage } from './bookings/BookingDetailsPage';
+import { BookingOverviewPage } from './bookings/BookingOverviewPage';
+import { VendorAssignmentPage } from './bookings/VendorAssignmentPage';
+import { SchedulingCalendarPage } from './bookings/SchedulingCalendarPage';
+import { PaymentTrackingPage } from './bookings/PaymentTrackingPage';
+import { CancellationRefundPage } from './bookings/CancellationRefundPage';
+import { InvoiceBillingPage } from './bookings/InvoiceBillingPage';
+import { BookingSearchPage } from './bookings/BookingSearchPage';
+import { NotificationAlertsPage } from './bookings/NotificationAlertsPage';
+import { BookingHistoryPage } from './bookings/BookingHistoryPage';
+import { BookingStatusPage } from './bookings/BookingStatusPage';
+
+
 import { PaymentsTransactionsPage } from './payments/PaymentsTransactionsPage';
 import { ComplaintsDisputesPage } from './complaints/ComplaintsDisputesPage';
 import { AnalyticsReportsPage } from './analytics/AnalyticsReportsPage';
@@ -55,8 +70,39 @@ const CATEGORY_PAGES = {
   'Assign: ✅ Verified Vendor Badge': VerifiedVendorBadgePage,
 };
 
-export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavigate }) => {
+// Booking Management Pages Mapping
+const BOOKING_PAGES = {
+  'Booking Overview': BookingOverviewPage,
+  'Booking Management': BookingManagementPage,
+  'Detailed Booking View': BookingDetailsPage,
+  'Vendor Assignment': VendorAssignmentPage,
+  'Scheduling & Calendar Management': SchedulingCalendarPage,
+  'Payment & Transaction Tracking': PaymentTrackingPage,
+  'Cancellation & Refund Handling': CancellationRefundPage,
+  'Invoice & Billing Management': InvoiceBillingPage,
+  'Search & Filters': BookingSearchPage,
+  'Notifications & Alerts': NotificationAlertsPage,
+  'Booking History & Logs': BookingHistoryPage,
+  'Booking Status Management': BookingStatusPage,
+};
+
+export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavigate, selectedBooking, setSelectedBooking }) => {
   const menu = menuConfig.find(m => m.id === activeMenu);
+
+  // Handle booking detail view
+  const handleViewBooking = (booking) => {
+    if (setSelectedBooking) {
+      setSelectedBooking(booking);
+      onNavigate('bookings', 'Detailed Booking View');
+    }
+  };
+
+  const handleBackFromBookingDetail = () => {
+    if (setSelectedBooking) {
+      setSelectedBooking(null);
+      onNavigate('bookings', 'Booking Overview');
+    }
+  };
 
   if (activeMenu === 'dashboard') return <DashboardOverview onNavigate={onNavigate} />;
   
@@ -77,7 +123,35 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
     return <VendorOverview onSelectCategory={onSelectCategory} />;
   }
   
-  if (activeMenu === 'bookings') return <BookingManagementPage />;
+  if (activeMenu === 'bookings') {
+    // Handle Detailed Booking View with selected booking
+    if (activeSubmenu === 'Detailed Booking View' && selectedBooking) {
+      return (
+        <BookingDetailsPage 
+          booking={selectedBooking} 
+          onBack={handleBackFromBookingDetail}
+          onUpdateStatus={(id, status) => {
+            console.log(`Update booking ${id} status to ${status}`);
+            // API call would go here
+          }}
+          onUpdatePayment={(id, payment) => {
+            console.log(`Update booking ${id} payment to ${payment}`);
+            // API call would go here
+          }}
+        />
+      );
+    }
+    
+    // Check if we have a specific booking page component
+    const BookingPage = BOOKING_PAGES[activeSubmenu];
+    if (BookingPage) {
+      return <BookingPage onViewBooking={handleViewBooking} />;
+    }
+    
+    // Default to Booking Overview
+    return <BookingManagementPage onSelectBooking={handleViewBooking} />;
+  }
+  
   if (activeMenu === 'payments') return <PaymentsTransactionsPage />;
   if (activeMenu === 'complaints') return <ComplaintsDisputesPage />;
   if (activeMenu === 'analytics') return <AnalyticsReportsPage />;
