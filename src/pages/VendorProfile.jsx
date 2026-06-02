@@ -118,49 +118,43 @@ const VendorProfile = () => {
     }
   };
 
+  // InfoField component matching CustomerProfile theme
+  const InfoField = ({ label, value, icon }) => (
+    <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+      <div className="bg-white p-2 rounded-lg shadow-sm flex-shrink-0">
+        <span className="text-base">{icon}</span>
+      </div>
+      <div className="flex-1 min-w-0">
+        <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
+          {label}
+        </label>
+        <div className="p-2 text-sm text-gray-800 bg-white rounded-lg border border-gray-200 font-medium">
+          {value || 'Not specified'}
+        </div>
+      </div>
+    </div>
+  );
+
   // ── section renderers ──
   const renderSectionContent = (sectionId = activeSection) => {
     switch (sectionId) {
       case 'basic':
         return (
-          <div className="space-y-4 sm:space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🏢 VENDOR / STUDIO NAME</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.basicDetails.businessName}</p>
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+              <div className="w-1.5 h-7 bg-red-600 mr-3 rounded-full"></div>
+              Basic Details
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <InfoField label="Business Name" value={vendorData.basicDetails.businessName} icon="🏢" />
+                <InfoField label="Owner Name" value={vendorData.basicDetails.ownerName} icon="👨‍💼" />
+                <InfoField label="Designation" value={vendorData.basicDetails.designation} icon="✨" />
+                <InfoField label="Business Type" value={vendorData.basicDetails.businessType} icon="🏛️" />
               </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">👨‍💼 OWNER / PHOTOGRAPHER NAME</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.basicDetails.ownerName}</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🏛️ BUSINESS TYPE</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.basicDetails.businessType}</p>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📅 EXPERIENCE</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#C0392B]">{vendorData.basicDetails.yearsOfExperience.split(' ')[0]}</span>
-                  <span className="text-xs sm:text-sm font-bold text-[#9A7B2C]">Years</span>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-2">✨ TYPE OF SERVICE</span>
-              <div className="grid grid-cols-1 xs:grid-cols-2 sm:flex sm:flex-wrap gap-2">
-                {vendorData.basicDetails.typeOfService.map((service, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-2 bg-gradient-to-r from-[#fff0f0] to-[#fff8e8] text-[#C0392B] border border-[#f5c6c6] rounded-lg px-3 py-2 text-xs font-bold"
-                  >
-                    <span className="text-base">□</span>
-                    <span>{service}</span>
-                  </div>
-                ))}
+              <div className="space-y-3">
+                <InfoField label="Years of Experience" value={vendorData.basicDetails.yearsOfExperience} icon="📅" />
+                <InfoField label="Type of Service" value={vendorData.basicDetails.typeOfService.join(', ')} icon="📸" />
               </div>
             </div>
           </div>
@@ -168,55 +162,24 @@ const VendorProfile = () => {
 
       case 'contact':
         return (
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📱 MOBILE NUMBER</span>
-                <a href={`tel:${vendorData.contactInfo.mobile.replace(/\s/g, '')}`} className="text-[#C0392B] font-semibold text-xs sm:text-sm md:text-base hover:text-[#9A7B2C] transition-colors">
-                  {vendorData.contactInfo.mobile}
-                </a>
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+              <div className="w-1.5 h-7 bg-yellow-500 mr-3 rounded-full"></div>
+              Contact Information
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <InfoField label="Mobile Number" value={vendorData.contactInfo.mobile} icon="📱" />
+                <InfoField label="Alternate Mobile" value={vendorData.contactInfo.alternateMobile} icon="📲" />
+                <InfoField label="Email ID" value={vendorData.contactInfo.email} icon="✉️" />
+                <InfoField label="Office Address" value={vendorData.contactInfo.officeAddress} icon="🏠" />
               </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📞 ALTERNATE MOBILE</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.contactInfo.alternateMobile}</p>
-              </div>
-
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">✉️ EMAIL ID</span>
-                <a href={`mailto:${vendorData.contactInfo.email}`} className="text-[#C0392B] font-semibold text-xs sm:text-sm md:text-base hover:text-[#9A7B2C] hover:underline transition-colors break-all">
-                  {vendorData.contactInfo.email}
-                </a>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🏢 OFFICE ADDRESS</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.contactInfo.officeAddress}</p>
-              </div>
-
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🏙️ CITY / DISTRICT</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.contactInfo.cityDistrict}</p>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🗺️ STATE</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.contactInfo.state}</p>
-              </div>
-
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📮 PIN CODE</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.contactInfo.pinCode}</p>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📍 CURRENT LOCATION</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base flex items-center gap-1">
-                  {vendorData.contactInfo.currentLocation}
-                </p>
-              </div>
-
-              <div className="sm:col-span-2">
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🌐 WEBSITE</span>
-                <a href={`https://${vendorData.contactInfo.website}`} target="_blank" rel="noopener noreferrer" className="text-[#C0392B] font-semibold text-xs sm:text-sm md:text-base hover:text-[#9A7B2C] hover:underline transition-colors break-all">
-                  {vendorData.contactInfo.website}
-                </a>
+              <div className="space-y-3">
+                <InfoField label="City / District" value={vendorData.contactInfo.cityDistrict} icon="🏙️" />
+                <InfoField label="State" value={vendorData.contactInfo.state} icon="🗺️" />
+                <InfoField label="PIN Code" value={vendorData.contactInfo.pinCode} icon="📍" />
+                <InfoField label="Current Location" value={vendorData.contactInfo.currentLocation} icon="🌍" />
+                <InfoField label="Website" value={vendorData.contactInfo.website} icon="🌐" />
               </div>
             </div>
           </div>
@@ -224,29 +187,16 @@ const VendorProfile = () => {
 
       case 'legal':
         return (
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🏛️ BUSINESS TYPE</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">Proprietorship</p>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📄 GST NUMBER</span>
-                <div className="bg-gradient-to-r from-[#fff8e8] to-white border border-[#e8c98a] rounded-lg px-3 py-2">
-                  <p className="font-mono font-bold text-xs sm:text-sm text-[#1a1a1a]">{vendorData.businessLegal.gstNumber}</p>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🆔 PAN NUMBER</span>
-                <div className="bg-gradient-to-r from-[#fff0f0] to-white border border-[#f5a5a5] rounded-lg px-3 py-2">
-                  <p className="font-mono font-bold text-xs sm:text-sm text-[#1a1a1a]">{vendorData.businessLegal.panNumber}</p>
-                </div>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📅 YEARS OF EXPERIENCE</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.businessLegal.yearsOfExperience}</p>
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+              <div className="w-1.5 h-7 bg-red-500 mr-3 rounded-full"></div>
+              Legal Details
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <InfoField label="GST Number" value={vendorData.businessLegal.gstNumber} icon="📄" />
+                <InfoField label="PAN Number" value={vendorData.businessLegal.panNumber} icon="🆔" />
+                <InfoField label="Years of Experience" value={vendorData.businessLegal.yearsOfExperience} icon="📅" />
               </div>
             </div>
           </div>
@@ -254,41 +204,19 @@ const VendorProfile = () => {
 
       case 'equipment':
         return (
-          <div className="space-y-4 sm:space-y-6">
-            <div>
-              <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-2">📸 CAMERA MODELS USED</span>
-              <div className="flex flex-wrap gap-2">
-                {vendorData.equipmentTeam.cameraModels.map((c, i) => (
-                  <span key={i} className="inline-flex items-center gap-1 bg-gradient-to-r from-[#fff8e8] to-white text-[#7a5c10] border border-[#e8c98a] rounded-full px-3 py-1.5 text-xs font-bold">
-                    📷 {c}
-                  </span>
-                ))}
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+              <div className="w-1.5 h-7 bg-yellow-500 mr-3 rounded-full"></div>
+              Equipment & Team
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <InfoField label="Camera Models" value={vendorData.equipmentTeam.cameraModels.join(', ')} icon="📷" />
+                <InfoField label="Video Equipment" value={vendorData.equipmentTeam.videoEquipment.join(', ')} icon="🎥" />
               </div>
-            </div>
-            <div>
-              <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-2">🎥 VIDEO EQUIPMENT / DRONE</span>
-              <div className="flex flex-wrap gap-2">
-                {vendorData.equipmentTeam.videoEquipment.map((e, i) => (
-                  <span key={i} className="inline-flex items-center gap-1 bg-gradient-to-r from-[#fff0f0] to-[#fff8e8] text-[#C0392B] border border-[#f5c6c6] rounded-full px-3 py-1.5 text-xs font-bold">
-                    🎬 {e}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">👥 TEAM MEMBERS</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#C0392B]">{vendorData.equipmentTeam.teamMembers.split(' ')[0]}</span>
-                  <span className="text-xs sm:text-sm font-bold text-[#9A7B2C]">Members</span>
-                </div>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🔄 BACKUP EQUIPMENT</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-base sm:text-lg text-green-600">✅</span>
-                  <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.equipmentTeam.backupEquipment}</p>
-                </div>
+              <div className="space-y-3">
+                <InfoField label="Team Members" value={vendorData.equipmentTeam.teamMembers} icon="👥" />
+                <InfoField label="Backup Equipment" value={vendorData.equipmentTeam.backupEquipment} icon="🔄" />
               </div>
             </div>
           </div>
@@ -296,109 +224,80 @@ const VendorProfile = () => {
 
       case 'coverage':
         return (
-          <div className="space-y-4 sm:space-y-6">
-            <div>
-              <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-2">🗺️ PREFERRED WEDDING LOCATIONS</span>
-              <div className="flex flex-wrap gap-2">
-                {vendorData.serviceCoverage.preferredLocations.map((loc, i) => (
-                  <span key={i} className="inline-flex items-center gap-1 bg-gradient-to-r from-[#fff8e8] to-white text-[#7a5c10] border border-[#e8c98a] rounded-full px-3 py-1.5 text-xs font-bold">
-                    ✓ {loc}
-                  </span>
-                ))}
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+              <div className="w-1.5 h-7 bg-yellow-500 mr-3 rounded-full"></div>
+              Service Coverage
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <InfoField label="Preferred Locations" value={vendorData.serviceCoverage.preferredLocations.join(', ')} icon="🗺️" />
+                <InfoField label="Travel Charges" value={vendorData.serviceCoverage.travelCharges} icon="🚗" />
               </div>
-            </div>
-            <div>
-              <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🚗 TRAVEL CHARGES APPLICABLE</span>
-              <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.serviceCoverage.travelCharges}</p>
             </div>
           </div>
         );
 
       case 'pricing':
         return (
-          <div className="space-y-4 sm:space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div className="bg-gradient-to-br from-[#C0392B] to-[#e74c3c] rounded-xl p-4 sm:p-6 text-white relative overflow-hidden">
-                <div className="absolute top-2 right-3 text-2xl sm:text-3xl opacity-70">💎</div>
-                <p className="text-[8px] sm:text-[10px] uppercase tracking-wider opacity-80 mb-1">Basic Wedding Package</p>
-                <p className="text-2xl sm:text-3xl md:text-4xl font-black">{vendorData.packagesPricing.basicWeddingPackage}</p>
-                <p className="text-[10px] sm:text-xs opacity-80 mt-1">Perfect for intimate weddings</p>
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+              <div className="w-1.5 h-7 bg-yellow-500 mr-3 rounded-full"></div>
+              Packages & Pricing
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <InfoField label="Basic Wedding Package" value={vendorData.packagesPricing.basicWeddingPackage} icon="💎" />
+                <InfoField label="Full Wedding Package" value={vendorData.packagesPricing.fullWeddingPackage} icon="👑" />
+                <InfoField label="Candid Photography" value={vendorData.packagesPricing.candidPhotography} icon="📸" />
               </div>
-              <div className="bg-gradient-to-br from-[#9A7B2C] to-[#d4a847] rounded-xl p-4 sm:p-6 text-white relative overflow-hidden">
-                <div className="absolute top-2 right-3 text-2xl sm:text-3xl opacity-70">👑</div>
-                <p className="text-[8px] sm:text-[10px] uppercase tracking-wider opacity-80 mb-1">Full Wedding Package</p>
-                <p className="text-2xl sm:text-3xl md:text-4xl font-black">{vendorData.packagesPricing.fullWeddingPackage}</p>
-                <p className="text-[10px] sm:text-xs opacity-80 mt-1">Complete coverage with all services</p>
+              <div className="space-y-3">
+                <InfoField label="Videography" value={vendorData.packagesPricing.videography} icon="🎬" />
+                <InfoField label="Album Charges" value={vendorData.packagesPricing.albumCharges} icon="📖" />
               </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-              {[
-                { label: 'Candid Photography', val: vendorData.packagesPricing.candidPhotography, emoji: '📸' },
-                { label: 'Videography', val: vendorData.packagesPricing.videography, emoji: '🎬' },
-                { label: 'Album Charges', val: vendorData.packagesPricing.albumCharges, emoji: '📖' },
-              ].map((item, i) => (
-                <div key={i} className="border-2 border-[#f0e0c0] rounded-xl p-3 sm:p-4">
-                  <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
-                    <span className="text-lg sm:text-xl">{item.emoji}</span>
-                    <span className="text-[8px] sm:text-[10px] font-bold text-[#C0392B] uppercase">{item.label}</span>
-                  </div>
-                  <p className="text-base sm:text-xl md:text-2xl font-black text-[#9A7B2C]">{item.val}</p>
-                </div>
-              ))}
             </div>
           </div>
         );
 
       case 'delivery':
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-            {[
-              { label: 'Photo Delivery', val: vendorData.deliveryTimeline.photoDelivery, emoji: '📸', bg: 'from-[#C0392B] to-[#e74c3c]' },
-              { label: 'Video Delivery', val: vendorData.deliveryTimeline.videoDelivery, emoji: '🎥', bg: 'from-[#9A7B2C] to-[#d4a847]' },
-              { label: 'Album Delivery', val: vendorData.deliveryTimeline.albumDelivery, emoji: '📚', bg: 'from-[#8B1A1A] to-[#C0392B]' },
-            ].map((item, i) => (
-              <div key={i} className={`bg-gradient-to-br ${item.bg} rounded-xl p-4 sm:p-6 text-center text-white`}>
-                <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">{item.emoji}</div>
-                <div className="text-2xl sm:text-3xl md:text-4xl font-black">{item.val.split(' ')[0]}</div>
-                <div className="text-xs sm:text-sm opacity-80 mb-0.5 sm:mb-1">Days</div>
-                <div className="text-[8px] sm:text-xs uppercase tracking-wider opacity-80">{item.label}</div>
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+              <div className="w-1.5 h-7 bg-yellow-500 mr-3 rounded-full"></div>
+              Delivery Timeline
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <InfoField label="Photo Delivery" value={vendorData.deliveryTimeline.photoDelivery} icon="📸" />
+                <InfoField label="Video Delivery" value={vendorData.deliveryTimeline.videoDelivery} icon="🎥" />
+                <InfoField label="Album Delivery" value={vendorData.deliveryTimeline.albumDelivery} icon="📚" />
               </div>
-            ))}
+            </div>
           </div>
         );
 
       case 'portfolio':
         return (
-          <div className="space-y-4 sm:space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🌐 WEBSITE / PORTFOLIO LINK</span>
-                <a href={`https://${vendorData.portfolio.website}`} target="_blank" rel="noopener noreferrer" className="text-[#C0392B] font-semibold text-xs sm:text-sm md:text-base hover:text-[#9A7B2C] hover:underline break-all">
-                  {vendorData.portfolio.website}
-                </a>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">☁️ GOOGLE DRIVE LINK</span>
-                <a href={`https://${vendorData.portfolio.driveLink}`} target="_blank" rel="noopener noreferrer" className="text-[#C0392B] font-semibold text-xs sm:text-sm md:text-base hover:text-[#9A7B2C] hover:underline break-all">
-                  {vendorData.portfolio.driveLink}
-                </a>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📱 INSTAGRAM</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.portfolio.instagram}</p>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">👍 FACEBOOK</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.portfolio.facebook}</p>
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+              <div className="w-1.5 h-7 bg-red-500 mr-3 rounded-full"></div>
+              Portfolio & Social Media
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <InfoField label="Website" value={vendorData.portfolio.website} icon="🌐" />
+                <InfoField label="Instagram" value={vendorData.portfolio.instagram} icon="📱" />
+                <InfoField label="Facebook" value={vendorData.portfolio.facebook} icon="👍" />
+                <InfoField label="Google Drive Link" value={vendorData.portfolio.driveLink} icon="☁️" />
               </div>
             </div>
-            <div>
-              <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-2">🎨 SAMPLE WORK PHOTOS</span>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
+            <div className="mt-4">
+              <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Sample Work Photos</label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {[1, 2, 3, 4].map(i => (
-                  <div key={i} className="h-20 sm:h-24 md:h-32 bg-gradient-to-br from-[#fff0f0] to-[#fff8e8] rounded-xl border-2 border-dashed border-[#e8c98a] flex flex-col items-center justify-center">
-                    <span className="text-xl sm:text-2xl mb-0.5 sm:mb-1">📷</span>
-                    <span className="text-[8px] sm:text-xs text-[#9A7B2C] font-semibold">Sample {i}</span>
+                  <div key={i} className="h-24 bg-gradient-to-br from-red-50 to-amber-50 rounded-xl border-2 border-dashed border-red-200 flex flex-col items-center justify-center hover:scale-105 transition-transform duration-300">
+                    <span className="text-2xl mb-1">📷</span>
+                    <span className="text-xs text-amber-600 font-semibold">Sample {i}</span>
                   </div>
                 ))}
               </div>
@@ -408,35 +307,18 @@ const VendorProfile = () => {
 
       case 'bank':
         return (
-          <div className="space-y-4 sm:space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">👤 ACCOUNT HOLDER NAME</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.bankDetails.accountHolder}</p>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🏦 BANK NAME</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.bankDetails.bankName}</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">💳 ACCOUNT NUMBER</span>
-                <div className="bg-gradient-to-r from-[#fff8e8] to-white border border-[#e8c98a] rounded-lg px-3 py-2">
-                  <p className="font-mono font-bold text-xs sm:text-sm text-[#1a1a1a]">{vendorData.bankDetails.accountNumber}</p>
-                </div>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">🔢 IFSC CODE</span>
-                <div className="bg-gradient-to-r from-[#fff0f0] to-white border border-[#f5a5a5] rounded-lg px-3 py-2">
-                  <p className="font-mono font-bold text-xs sm:text-sm text-[#1a1a1a]">{vendorData.bankDetails.ifscCode}</p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <span className="text-[#9A7B2C] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📱 UPI ID</span>
-              <div className="inline-flex bg-gradient-to-r from-[#9A7B2C] to-[#d4a847] rounded-lg px-3 sm:px-4 py-1.5 sm:py-2">
-                <span className="text-white font-bold text-xs sm:text-sm">{vendorData.bankDetails.upiId}</span>
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+              <div className="w-1.5 h-7 bg-blue-500 mr-3 rounded-full"></div>
+              Bank Information
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <InfoField label="Account Holder Name" value={vendorData.bankDetails.accountHolder} icon="👤" />
+                <InfoField label="Bank Name" value={vendorData.bankDetails.bankName} icon="🏦" />
+                <InfoField label="Account Number" value={vendorData.bankDetails.accountNumber} icon="💳" />
+                <InfoField label="IFSC Code" value={vendorData.bankDetails.ifscCode} icon="🔢" />
+                <InfoField label="UPI ID" value={vendorData.bankDetails.upiId} icon="📱" />
               </div>
             </div>
           </div>
@@ -444,25 +326,19 @@ const VendorProfile = () => {
 
       case 'declaration':
         return (
-          <div className="bg-gradient-to-br from-[#fff8f8] to-[#fffbf0] border-2 border-[#e8c98a] rounded-xl p-4 sm:p-6">
-            <div className="flex gap-2 sm:gap-3 mb-3 sm:mb-4">
-              <span className="text-xl sm:text-2xl">✍️</span>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center">
+              <div className="w-1.5 h-7 bg-red-500 mr-3 rounded-full"></div>
+              Declaration
+            </h2>
+            <div className="bg-gradient-to-br from-red-50 to-amber-50 rounded-2xl p-6 border border-red-200">
+              <p className="text-gray-700 text-sm leading-relaxed mb-4">
                 I hereby declare that the above information is true and correct. I agree to provide photography services professionally for marriage events as per agreed terms and conditions.
               </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 pt-3 sm:pt-4 border-t-2 border-[#e8c98a]">
-              <div>
-                <span className="text-[#9A7B2C] text-[8px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">✍️ VENDOR SIGNATURE</span>
-                <p className="text-base sm:text-xl font-semibold text-[#1a1a1a] italic" style={{ fontFamily: 'Georgia, serif' }}>{vendorData.declaration.signature}</p>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[8px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📅 DATE</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.declaration.date}</p>
-              </div>
-              <div>
-                <span className="text-[#9A7B2C] text-[8px] sm:text-[10px] font-bold uppercase tracking-widest block mb-1">📍 PLACE</span>
-                <p className="text-[#1a1a1a] font-semibold text-xs sm:text-sm md:text-base">{vendorData.declaration.place}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-red-200">
+                <InfoField label="Vendor Signature" value={vendorData.declaration.signature} icon="✍️" />
+                <InfoField label="Date" value={vendorData.declaration.date} icon="📅" />
+                <InfoField label="Place" value={vendorData.declaration.place} icon="📍" />
               </div>
             </div>
           </div>
@@ -476,13 +352,8 @@ const VendorProfile = () => {
   // Render all sections for full details view
   const renderAllSections = () => {
     return sections.map((section, index) => (
-      <div key={section.id} className={`${index !== sections.length - 1 ? 'mb-6 sm:mb-8' : 'mb-4 sm:mb-6'}`}>
-        <div className="flex items-center mb-3 sm:mb-4">
-          <span className="text-xl sm:text-2xl mr-2">{section.emoji}</span>
-          <h3 className="text-base sm:text-lg font-bold text-[#C0392B]">{section.title}</h3>
-          <div className="flex-1 h-0.5 bg-gradient-to-r from-[#C0392B] to-[#e8c98a] to-transparent rounded-full ml-3"></div>
-        </div>
-        <div className="border border-gray-200 rounded-2xl p-3 sm:p-6 shadow-sm">
+      <div key={section.id} className={`${index !== sections.length - 1 ? 'mb-8' : 'mb-6'}`}>
+        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
           {renderSectionContent(section.id)}
         </div>
       </div>
@@ -490,306 +361,223 @@ const VendorProfile = () => {
   };
 
   return (
-    <>
-      {/* Import Google Fonts */}
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-      
-      <div className="min-h-screen bg-gray-100 p-2 sm:p-4">
-        <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-100">
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-6 max-w-6xl">
 
-          {/* BANNER - Increased height with red and gold theme */}
-          <div className="bg-gradient-to-r from-red-900 via-red-700 to-red-600 rounded-t-2xl pt-4 sm:pt-6 pb-6 sm:pb-8 px-3 sm:px-6 relative overflow-hidden border border-gray-200 shadow-lg">
-            {/* Decorative golden elements */}
-            <div className="absolute top-0 right-0 w-32 sm:w-48 h-32 sm:h-48 bg-[#d4a847]/10 rounded-full -mr-10 sm:-mr-16 -mt-10 sm:-mt-16"></div>
-            <div className="absolute bottom-0 left-0 w-24 sm:w-40 h-24 sm:h-40 bg-[#d4a847]/10 rounded-full -ml-8 sm:-ml-12 -mb-8 sm:-mb-12"></div>
-            <div className="absolute top-1/2 left-1/4 w-1.5 sm:w-2 h-1.5 sm:h-2 bg-[#d4a847] rounded-full animate-pulse"></div>
-            <div className="absolute bottom-1/4 right-1/3 w-2 sm:w-3 h-2 sm:h-3 bg-[#d4a847] rounded-full animate-pulse delay-300"></div>
-            
-            {/* Main content with logo on left */}
-            <div className="relative z-10 flex flex-col sm:flex-row items-start gap-3 sm:gap-5">
-              {/* Logo - Left side */}
-              <div className="flex-shrink-0">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-xl bg-gradient-to-br from-[#fff0f0] to-[#fffbf0] border-2 sm:border-4 border-[#d4a847] shadow-xl flex items-center justify-center">
-                  {vendorData.basicDetails.logo ? (
-                    <img src={vendorData.basicDetails.logo} alt="Vendor Logo" className="w-full h-full object-cover rounded-lg" />
-                  ) : (
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C0392B" strokeWidth="1.5" className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                  )}
-                </div>
-              </div>
-
-              {/* Center content - Title and details */}
-              <div className="flex-1 min-w-0">
-                {/* Wedding Photography Vendor badge - Golden */}
-                <div className="inline-flex items-center gap-1 bg-gradient-to-r from-[#d4a847]/20 to-[#e5b95a]/20 backdrop-blur-sm border border-[#d4a847] rounded-full px-2 sm:px-3 py-1 text-[#d4a847] text-[8px] sm:text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3">
-                  📸 WEDDING PHOTOGRAPHY VENDOR
-                </div>
-
-                {/* Business Name - Golden gradient */}
-                <h1 className="font-['Playfair_Display'] text-base sm:text-xl md:text-2xl lg:text-3xl font-black bg-gradient-to-r from-[#d4a847] via-[#e5b95a] to-[#f0c040] bg-clip-text text-transparent mb-2 sm:mb-3 leading-tight">
-                  {vendorData.basicDetails.businessName}
-                </h1>
-
-                {/* Details row with golden text */}
-                <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-4 gap-y-1 text-[#d4a847] text-[10px] sm:text-xs font-semibold">
-                  <span>{vendorData.basicDetails.designation}</span>
-                  <span className="text-[#d4a847]/40 hidden sm:inline">•</span>
-                  <span className="flex items-center gap-1">
-                    <span>📍</span> Chennai
-                  </span>
-                  <span className="text-[#d4a847]/40 hidden sm:inline">•</span>
-                  <span className="flex items-center gap-1">
-                    <span>⭐</span> {vendorData.basicDetails.yearsOfExperience}
-                  </span>
-                  <span className="text-[#d4a847]/40 hidden sm:inline">•</span>
-                  <span className="flex items-center gap-1">
-                    <span>🏛️</span> {vendorData.basicDetails.businessType}
-                  </span>
-                </div>
+        {/* Profile Card - Matching CustomerProfile theme */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6 border border-gray-200">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+            {/* Logo / Photo */}
+            <div className="relative flex-shrink-0">
+              <div className="w-36 h-36 rounded-2xl overflow-hidden border-4 border-red-100 shadow-lg bg-gradient-to-br from-red-100 to-amber-100 flex items-center justify-center">
+                {vendorData.basicDetails.logo ? (
+                  <img src={vendorData.basicDetails.logo} alt={vendorData.basicDetails.businessName} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-red-600 text-5xl font-bold">
+                    {vendorData.basicDetails.businessName.charAt(0)}
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Vendor ID, Email, Website and Full View toggle - all in one row */}
-          <div className="mt-4 flex flex-wrap items-center gap-2 justify-between">
-            <div className="flex flex-wrap items-center gap-2">
-              {/* Vendor ID */}
-              <div className="bg-gradient-to-r from-[#d4a847]/20 to-[#e5b95a]/20 backdrop-blur-sm border border-[#d4a847] rounded-lg px-3 sm:px-4 py-1.5 sm:py-2">
-                <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-[#d4a847] mb-0.5">VENDOR ID</p>
-                <p className="text-xs sm:text-sm font-bold text-[#d4a847] font-mono">{vendorData.id}</p>
+            {/* Info */}
+            <div className="flex-1 text-center md:text-left">
+              <h1 className="text-3xl font-bold text-gray-800 mb-1">{vendorData.basicDetails.businessName}</h1>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-gray-500 text-sm mb-4">
+                <span className="flex items-center gap-1"><span>📍</span>{vendorData.contactInfo.currentLocation}</span>
+                <span className="flex items-center gap-1"><span>⭐</span>{vendorData.basicDetails.yearsOfExperience}</span>
+                <span className="flex items-center gap-1"><span>🏛️</span>{vendorData.basicDetails.businessType}</span>
               </div>
 
-              {/* Email chip */}
-              <a href={`mailto:${vendorData.contactInfo.email}`} className="inline-flex items-center gap-1 bg-gradient-to-r from-[#d4a847] to-[#e5b95a] text-[#6B0E0E] rounded-lg px-3 py-1.5 font-bold text-[10px] sm:text-xs hover:opacity-90 transition-all">
-                ✉️ Email
-              </a>
+              {/* Badges */}
+              <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                <span className="flex items-center gap-1.5 bg-red-100 text-red-800 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm">
+                  <span>🆔</span> {vendorData.id}
+                </span>
+                <span className="flex items-center gap-1.5 bg-yellow-100 text-yellow-800 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm">
+                  <span>👨‍💼</span> {vendorData.basicDetails.ownerName}
+                </span>
+                <span className="flex items-center gap-1.5 bg-purple-100 text-purple-800 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm">
+                  <span>✨</span> {vendorData.basicDetails.designation}
+                </span>
+              </div>
 
-              {/* Website chip */}
-              <a href={`https://${vendorData.contactInfo.website}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 bg-transparent border border-[#d4a847] text-[#d4a847] rounded-lg px-3 py-1.5 font-bold text-[10px] sm:text-xs hover:bg-[#d4a847]/10 transition-all">
-                🌐 Website
-              </a>
+              {/* Contact Buttons */}
+              <div className="flex flex-wrap gap-2 mt-3 justify-center md:justify-start">
+                <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                  <span>📞</span> {vendorData.contactInfo.mobile}
+                </button>
+                <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                  <span>✉️</span> {vendorData.contactInfo.email}
+                </button>
+                <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                  <span>🌐</span> {vendorData.contactInfo.website}
+                </button>
+              </div>
             </div>
           </div>
-          </div>
+        </div>
 
-          {/* Full View / Back to Normal toggle - right side */}
-              <div className="w-full flex justify-end my-3">
-              <button
-                onClick={() => setShowFullDetails(prev => !prev)}
-                className="inline-flex items-center gap-1.5 bg-white border border-gray-300 rounded-lg px-5 py-2 text-gray-700 text-xs sm:text-sm font-semibold hover:bg-gray-50 shadow-sm transition-all"
-              >
-                {showFullDetails ? '← Normal View' : '👁️ Full View'}
-              </button>
-            </div>
-
-          {/* MAIN CONTENT */}
-          <div className="bg-white rounded-b-2xl shadow-lg p-3 sm:p-6 border border-gray-200">
-
-            {!showFullDetails ? (
+        {/* Full View Toggle Button - Matching CustomerProfile style */}
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={() => setShowFullDetails(prev => !prev)}
+            className="inline-flex items-center gap-2 bg-white border border-gray-300 rounded-xl px-5 py-2.5 text-gray-700 text-sm font-semibold hover:bg-gray-50 shadow-sm transition-all"
+          >
+            {showFullDetails ? (
               <>
-                {/* Section Navigation with View Full Details button at the end */}
-                <div className="overflow-x-auto mb-4 sm:mb-6 -mx-3 px-3 sm:mx-0 sm:px-0">
-                  <div className="flex min-w-max bg-white border border-gray-200 rounded-2xl p-2 gap-1 items-stretch shadow-sm">
-                    {sections.map((section) => (
-                      <button
-                        key={section.id}
-                        onClick={() => setActiveSection(section.id)}
-                        className={`flex flex-col items-center gap-0.5 px-2 sm:px-4 py-1.5 sm:py-3 rounded-xl transition-all ${
-                        activeSection === section.id
-                          ? 'bg-red-600 shadow-md text-white font-bold'
-                          : 'text-gray-600 hover:bg-gray-100'
-                      }`}
-                      >
-                        <span className="text-sm sm:text-base md:text-xl">{section.emoji}</span>
-                        <span className="text-[7px] sm:text-[8px] md:text-xs font-bold whitespace-nowrap">{section.title}</span>
-                      </button>
-                    ))}
-                    
-                    {/* View Full Details button in navigation */}
-                    {/* <button
-                      onClick={() => setShowFullDetails(true)}
-                      className="flex flex-col items-center gap-0.5 px-2 sm:px-4 py-1.5 sm:py-3 rounded-lg transition-all bg-gradient-to-r from-[#C0392B] to-[#e74c3c] text-white font-bold hover:opacity-90"
-                    >
-                      <span className="text-sm sm:text-base md:text-xl">👁️</span>
-                      <span className="text-[7px] sm:text-[8px] md:text-xs font-bold whitespace-nowrap">Full View</span>
-                    </button> */}
-                  </div>
-                </div>
-
-                {/* Active Section Header */}
-                <div className="flex items-center mb-3 pb-2 border-b-2 border-[#fdf0d8]">
-                  <span className="text-lg sm:text-xl md:text-2xl mr-2">{sections.find(s => s.id === activeSection)?.emoji}</span>
-                  <h3 className="text-sm sm:text-base md:text-lg font-extrabold text-[#C0392B]">{sections.find(s => s.id === activeSection)?.title}</h3>
-                  <div className="flex-1 h-0.5 bg-gradient-to-r from-[#C0392B] to-[#e8c98a] to-transparent rounded-full ml-3"></div>
-                </div>
-
-                {/* Active Section Content */}
-                <div className="border border-gray-200 rounded-2xl p-3 sm:p-6 shadow-sm">
-                  {renderSectionContent()}
-                  
-                  {/* Navigation Buttons */}
-                  <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t-2 border-[#fdf0d8] flex justify-between items-center">
-                    <button
-                      onClick={goToPreviousSection}
-                      disabled={activeSection === sections[0].id}
-                      className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-bold text-[10px] sm:text-xs transition-all ${
-                        activeSection === sections[0].id
-                          ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                          : 'bg-white text-[#C0392B] border border-[#f5c6c6] hover:bg-[#fff0f0]'
-                      }`}
-                    >
-                      ← Back
-                    </button>
-
-                    <div className="flex gap-1 sm:gap-1.5">
-                      {sections.map((_, i) => (
-                        <button
-                          key={i}
-                          onClick={() => setActiveSection(sections[i].id)}
-                          className={`h-1 sm:h-1.5 rounded-full transition-all ${
-                            sections.findIndex(s => s.id === activeSection) === i
-                              ? 'w-3 sm:w-5 bg-[#C0392B]'
-                              : 'w-1 sm:w-1.5 bg-[#f5c6c6]'
-                          }`}
-                        />
-                      ))}
-                    </div>
-
-                    <button
-                      onClick={goToNextSection}
-                      disabled={activeSection === sections[sections.length - 1].id}
-                      className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-bold text-[10px] sm:text-xs text-white transition-all ${
-                        activeSection === sections[sections.length - 1].id
-                          ? 'bg-gray-300 cursor-not-allowed'
-                          : 'bg-gradient-to-r from-[#C0392B] to-[#e74c3c] hover:opacity-90'
-                      }`}
-                    >
-                      Next →
-                    </button>
-                  </div>
-                </div>
-
-                {/* Bottom Contact Cards */}
-                <ContactCards vendorData={vendorData} companyLogo={companyLogo} />
+                <span>←</span> Normal View
               </>
             ) : (
               <>
-                {/* Full Details Header with Back to Normal button */}
-                <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center gap-3 mb-4 sm:mb-6">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl sm:text-2xl md:text-3xl">📋</span>
-                    <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-[#C0392B]">Complete Profile</h2>
-                  </div>
-                </div>
-
-                {/* All Sections */}
-                {renderAllSections()}
-
-                {/* Contact Cards in Full View */}
-                <ContactCards vendorData={vendorData} companyLogo={companyLogo} />
+                <span>👁️</span> Full View
               </>
             )}
-          </div>
+          </button>
         </div>
+
+        {/* Tab Navigation - Matching CustomerProfile theme */}
+        {!showFullDetails && (
+          <div className="bg-white rounded-2xl shadow-sm p-2 mb-6 border border-gray-200">
+            <div className="flex overflow-x-auto gap-1">
+              {sections.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveSection(tab.id)}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition whitespace-nowrap ${
+                    activeSection === tab.id
+                      ? 'bg-red-600 text-white shadow-md'
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <span>{tab.emoji}</span>
+                  {tab.title}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Tab Content or Full Details */}
+        {!showFullDetails ? (
+          <>
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200 mb-6">
+              {renderSectionContent()}
+              
+              {/* Navigation Buttons */}
+              <div className="mt-6 pt-4 border-t border-gray-200 flex justify-between items-center">
+                <button
+                  onClick={goToPreviousSection}
+                  disabled={activeSection === sections[0].id}
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
+                    activeSection === sections[0].id
+                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      : 'bg-white text-red-600 border border-red-200 hover:bg-red-50'
+                  }`}
+                >
+                  ← Back
+                </button>
+
+                <div className="flex gap-1.5">
+                  {sections.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveSection(sections[i].id)}
+                      className={`h-1.5 rounded-full transition-all ${
+                        sections.findIndex(s => s.id === activeSection) === i
+                          ? 'w-5 bg-red-600'
+                          : 'w-1.5 bg-red-200'
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  onClick={goToNextSection}
+                  disabled={activeSection === sections[sections.length - 1].id}
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm text-white transition-all ${
+                    activeSection === sections[sections.length - 1].id
+                      ? 'bg-gray-300 cursor-not-allowed'
+                      : 'bg-red-600 hover:bg-red-700'
+                  }`}
+                >
+                  Next →
+                </button>
+              </div>
+            </div>
+
+            {/* Contact Cards - Matching CustomerProfile style */}
+            <ContactCards vendorData={vendorData} companyLogo={companyLogo} />
+          </>
+        ) : (
+          <>
+            <div className="mb-6">
+              {renderAllSections()}
+            </div>
+            <ContactCards vendorData={vendorData} companyLogo={companyLogo} />
+          </>
+        )}
+
       </div>
-    </>
+    </div>
   );
 };
 
-// Contact Cards Component - Mobile optimized
+// Contact Cards Component - Matching CustomerProfile theme
 const ContactCards = ({ vendorData, companyLogo }) => (
-  <>
-    <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-200">
-      <div className="flex items-center mb-3 sm:mb-4">
-        <span className="text-base sm:text-lg md:text-xl mr-2">📇</span>
-        <h3 className="text-xs sm:text-sm md:text-base font-extrabold text-[#C0392B]">Vendor Contact Details</h3>
-        <div className="flex-1 h-0.5 bg-gradient-to-r from-[#C0392B] to-[#e8c98a] to-transparent rounded-full ml-3"></div>
+  <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+    <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
+      <div className="w-1.5 h-6 bg-red-600 mr-3 rounded-full"></div>
+      Vendor Contact Details
+    </h2>
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Primary Address */}
+      <div className="space-y-3">
+        <InfoField label="Primary Mobile" value={vendorData.contactInfo.mobile} icon="📞" />
+        <InfoField label="Alternate Mobile" value={vendorData.contactInfo.alternateMobile} icon="📲" />
+        <InfoField label="Email ID" value={vendorData.contactInfo.email} icon="✉️" />
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-        {/* Primary Address */}
-        <div className="border border-gray-200 rounded-2xl p-3 sm:p-5 shadow-sm">
-          <h4 className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm font-extrabold text-[#C0392B] mb-2 sm:mb-3">
-            <span className="text-sm sm:text-base">🏢</span> Primary Vendor Address
-          </h4>
-          <div className="space-y-1.5 sm:space-y-2">
-            <div className="flex items-start gap-1 sm:gap-1.5">
-              <span className="text-amber-500 text-sm sm:text-base">📞</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-800 break-all">{vendorData.contactInfo.mobile}</span>
-            </div>
-            <div className="flex items-start gap-1 sm:gap-1.5">
-              <span className="text-red-500 text-sm sm:text-base">✉️</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-800 break-all">{vendorData.contactInfo.email}</span>
-            </div>
-            <div className="flex items-start gap-1 sm:gap-1.5">
-              <span className="text-amber-500 text-sm sm:text-base flex-shrink-0">📍</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-800">
-                {vendorData.contactInfo.officeAddress}, {vendorData.contactInfo.cityDistrict}, {vendorData.contactInfo.state} - {vendorData.contactInfo.pinCode}
-              </span>
-            </div>
-          </div>
-        </div>
 
-        {/* Secondary Address */}
-        <div className="border border-gray-200 rounded-2xl p-3 sm:p-5 shadow-sm">
-          <h4 className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm font-extrabold text-[#C0392B] mb-2 sm:mb-3">
-            <span className="text-sm sm:text-base">🏛️</span> Office Address (Secondary)
-          </h4>
-          <div className="space-y-1.5 sm:space-y-2">
-            <div className="flex items-start gap-1 sm:gap-1.5">
-              <span className="text-amber-500 text-sm sm:text-base">📞</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-800">{vendorData.contactInfo.alternateMobile}</span>
-            </div>
-            <div className="flex items-start gap-1 sm:gap-1.5">
-              <span className="text-red-500 text-sm sm:text-base">✉️</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-800 break-all">{vendorData.contactInfo.email}</span>
-            </div>
-            <div className="flex items-start gap-1 sm:gap-1.5">
-              <span className="text-amber-500 text-sm sm:text-base flex-shrink-0">📍</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-800">
-                Secondary Office, {vendorData.contactInfo.cityDistrict}, {vendorData.contactInfo.state}
-              </span>
-            </div>
-          </div>
-        </div>
+      {/* Secondary Address */}
+      <div className="space-y-3">
+        <InfoField label="Office Address" value={vendorData.contactInfo.officeAddress} icon="🏢" />
+        <InfoField label="City / District" value={vendorData.contactInfo.cityDistrict} icon="🏙️" />
+        <InfoField label="State / PIN Code" value={`${vendorData.contactInfo.state} - ${vendorData.contactInfo.pinCode}`} icon="📍" />
       </div>
     </div>
 
-    {/* Enquiry Section - Mobile optimized */}
-    <div className="mt-3 sm:mt-4 bg-gray-50 border border-gray-200 rounded-2xl p-3 sm:p-5 shadow-sm">
-      <div className="flex flex-col sm:flex-row items-start gap-2 sm:gap-4">
-        <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-[#f5f0e8] rounded-xl flex items-center justify-center flex-shrink-0 border border-[#e8d5a0]">
-          <span className="text-xl sm:text-2xl md:text-3xl">💼</span>
-        </div>
-        
-        <div className="flex-1 w-full">
-          <h4 className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm font-extrabold text-[#C0392B] mb-2 sm:mb-3">
-            <span className="text-sm sm:text-base">📞</span> For Enquiry - Eliteinova
-          </h4>
-          <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 sm:gap-3">
-            <div className="flex items-center gap-1 sm:gap-1.5">
-              <span className="text-red-500 text-sm sm:text-base">📱</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-800">+91 99999 88888</span>
-            </div>
-            <div className="flex items-center gap-1 sm:gap-1.5">
-              <span className="text-amber-500 text-sm sm:text-base">✉️</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-800 break-all">support@eliteinova.com</span>
-            </div>
-            <div className="flex items-center gap-1 sm:gap-1.5">
-              <span className="text-gray-600 text-sm sm:text-base">🕒</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-800">Mon-Sat: 9AM-7PM</span>
-            </div>
-            <div className="flex items-start gap-1 sm:gap-1.5 xs:col-span-2 sm:col-span-1">
-              <span className="text-amber-500 text-sm sm:text-base flex-shrink-0">📍</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-800">123 Elite Plaza, Chennai - 600001</span>
-            </div>
-          </div>
-        </div>
+    {/* Enquiry Section */}
+    <div className="mt-6 pt-4 border-t border-gray-200">
+      <h3 className="text-md font-bold text-gray-800 mb-3 flex items-center">
+        <span className="mr-2">💼</span> For Enquiry - Eliteinova
+      </h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <InfoField label="Support Number" value="+91 99999 88888" icon="📱" />
+        <InfoField label="Support Email" value="support@eliteinova.com" icon="✉️" />
+        <InfoField label="Working Hours" value="Mon-Sat: 9AM-7PM" icon="🕒" />
+        <InfoField label="Office Address" value="123 Elite Plaza, Chennai - 600001" icon="📍" />
       </div>
     </div>
-  </>
+  </div>
+);
+
+// InfoField component matching CustomerProfile theme
+const InfoField = ({ label, value, icon }) => (
+  <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+    <div className="bg-white p-2 rounded-lg shadow-sm flex-shrink-0">
+      <span className="text-base">{icon}</span>
+    </div>
+    <div className="flex-1 min-w-0">
+      <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">
+        {label}
+      </label>
+      <div className="p-2 text-sm text-gray-800 bg-white rounded-lg border border-gray-200 font-medium break-all">
+        {value || 'Not specified'}
+      </div>
+    </div>
+  </div>
 );
 
 export default VendorProfile;
