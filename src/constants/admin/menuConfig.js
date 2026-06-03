@@ -76,11 +76,18 @@ export const menuConfig = [
     icon: ICONS.payments, 
     color: 'text-purple-600', 
     submenus: [
-      'All Transactions',
-      'Pending Payments',
-      'Completed Payments',
-      'Refunds',
-      'Payment Analytics'
+      'Transaction Overview',
+      'Payment Status Tracking',
+      'Multiple Payment Methods',
+      'Payment Gateway Integration',
+      'Invoice & Billing Management',
+      'Refund Management',
+      'Vendor Payout Management',
+      'Commission Tracking',
+      'Transaction History & Logs',
+      'Fraud Detection & Security',
+      'Search & Filters',
+      'Reports & Analytics'
     ], 
     vendorStyle: false 
   },
@@ -90,11 +97,17 @@ export const menuConfig = [
     icon: ICONS.complaints, 
     color: 'text-rose-600', 
     submenus: [
-      'Open Tickets',
-      'In Progress',
-      'Resolved',
-      'Escalated',
-      'Dispute Resolution'
+      'Complaint Registration',
+      'Ticket Management System',
+      'Issue Categorization',
+      'Status Tracking',
+      'Detailed Case View',
+      'Communication & Interaction Logs',
+      'Dispute Resolution Workflow',
+      'Escalation Management',
+      'Admin Actions',
+      'Notifications & Updates',
+      'Reports & Insights'
     ], 
     vendorStyle: false 
   },
@@ -104,11 +117,16 @@ export const menuConfig = [
     icon: ICONS.analytics, 
     color: 'text-cyan-600', 
     submenus: [
-      'Revenue Reports',
+      'Dashboard Analytics Overview',
+      'User & Customer Insights',
+      'Vendor Performance Reports',
       'Booking Analytics',
-      'Vendor Performance',
-      'Customer Insights',
-      'Custom Reports'
+      'Revenue & Financial Reports',
+      'Complaint & Support Reports',
+      'Conversion & Growth Metrics',
+      'Custom Reports Generation',
+      'Data Export Options',
+      'Visual Charts & Graphs'
     ], 
     vendorStyle: false 
   },
@@ -118,10 +136,16 @@ export const menuConfig = [
     icon: ICONS.roles, 
     color: 'text-indigo-600', 
     submenus: [
-      'All Admins',
-      'Roles Management',
-      'Permissions',
-      'Activity Logs'
+      'Role Creation & Management',
+      'Permission-Based Access Control',
+      'Custom Role Configuration',
+      'User Assignment',
+      'Access Restrictions',
+      'Activity Monitoring',
+      'Audit Logs',
+      'Secure Authentication',
+      'Role Editing & Deactivation',
+      'Common Admin Roles'
     ], 
     vendorStyle: false 
   },
@@ -131,10 +155,17 @@ export const menuConfig = [
     icon: ICONS.notifications, 
     color: 'text-orange-500', 
     submenus: [
-      'Send Notifications',
+      'Multi-Channel Notifications',
+      'Event-Based Notifications',
+      'Custom Notification Creation',
+      'Audience Targeting',
       'Notification Templates',
-      'Notification History',
-      'Scheduled Notifications'
+      'Scheduling Notifications',
+      'Real-Time Alerts',
+      'Delivery Tracking',
+      'User Preferences Control',
+      'History & Logs'
+
     ], 
     vendorStyle: false 
   },
@@ -145,10 +176,15 @@ export const menuConfig = [
     color: 'text-gray-600', 
     submenus: [
       'General Settings',
+      'User Settings',
+      'Vendor Settings',
       'Payment Settings',
-      'Email Settings',
+      'Notification Settings',
+      'KYC & Verification Settings',
+      'Booking Settings',
       'Security Settings',
-      'API Configuration'
+      'Content Management Settings',
+      'Commission & Pricing Settings'
     ], 
     vendorStyle: false 
   },

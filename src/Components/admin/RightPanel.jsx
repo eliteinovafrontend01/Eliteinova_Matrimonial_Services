@@ -28,7 +28,7 @@ import { GSTVerificationPage } from './vendors/verification/GSTVerificationPage'
 import { IDProofVerificationPage } from './vendors/verification/IDProofVerificationPage';
 import { VerifiedVendorBadgePage } from './vendors/verification/VerifiedVendorBadgePage';
 
-// Booking Management Pages - Using relative paths from current directory
+// Booking Management Pages
 import { BookingManagementPage } from './bookings/BookingManagementPage';
 import { BookingDetailsPage } from './bookings/BookingDetailsPage';
 import { BookingOverviewPage } from './bookings/BookingOverviewPage';
@@ -42,8 +42,22 @@ import { NotificationAlertsPage } from './bookings/NotificationAlertsPage';
 import { BookingHistoryPage } from './bookings/BookingHistoryPage';
 import { BookingStatusPage } from './bookings/BookingStatusPage';
 
-
+// Payment Management Pages
 import { PaymentsTransactionsPage } from './payments/PaymentsTransactionsPage';
+import { TransactionOverview } from './payments/TransactionOverview';
+import { PaymentStatusTracking } from './payments/PaymentStatusTracking';
+import { MultiplePaymentMethods } from './payments/MultiplePaymentMethods';
+import { PaymentGatewayIntegration } from './payments/PaymentGatewayIntegration';
+import { InvoiceBillingManagement } from './payments/InvoiceBillingManagement';
+import { RefundManagement } from './payments/RefundManagement';
+import { VendorPayoutManagement } from './payments/VendorPayoutManagement';
+import { CommissionTracking } from './payments/CommissionTracking';
+import { TransactionHistoryLogs } from './payments/TransactionHistoryLogs';
+import { FraudDetectionSecurity } from './payments/FraudDetectionSecurity';
+import { SearchFiltersPayments } from './payments/SearchFiltersPayments';
+import { ReportsAnalytics } from './payments/ReportsAnalytics';
+
+// Other Pages
 import { ComplaintsDisputesPage } from './complaints/ComplaintsDisputesPage';
 import { AnalyticsReportsPage } from './analytics/AnalyticsReportsPage';
 import { AdminRolesPage } from './roles/AdminRolesPage';
@@ -86,6 +100,23 @@ const BOOKING_PAGES = {
   'Booking Status Management': BookingStatusPage,
 };
 
+// Payment Management Pages Mapping
+const PAYMENT_PAGES = {
+  'Payments & Transactions': PaymentsTransactionsPage,
+  'Transaction Overview': TransactionOverview,
+  'Payment Status Tracking': PaymentStatusTracking,
+  'Multiple Payment Methods': MultiplePaymentMethods,
+  'Payment Gateway Integration': PaymentGatewayIntegration,
+  'Invoice & Billing Management': InvoiceBillingManagement,
+  'Refund Management': RefundManagement,
+  'Vendor Payout Management': VendorPayoutManagement,
+  'Commission Tracking': CommissionTracking,
+  'Transaction History & Logs': TransactionHistoryLogs,
+  'Fraud Detection & Security': FraudDetectionSecurity,
+  'Search & Filters': SearchFiltersPayments,
+  'Reports & Analytics': ReportsAnalytics,
+};
+
 export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavigate, selectedBooking, setSelectedBooking }) => {
   const menu = menuConfig.find(m => m.id === activeMenu);
 
@@ -104,8 +135,10 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
     }
   };
 
+  // Dashboard
   if (activeMenu === 'dashboard') return <DashboardOverview onNavigate={onNavigate} />;
   
+  // Customers Section
   if (activeMenu === 'customers') {
     if (activeSubmenu === 'View All Registered Customers') return <ViewAllCustomers />;
     if (activeSubmenu === 'Track Booking History') return <TrackBookingHistory />;
@@ -114,6 +147,7 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
     return <CustomerManagementPage onSelect={(sub) => onNavigate('customers', sub)} />;
   }
   
+  // Vendors Section
   if (activeMenu === 'vendors') {
     if (activeSubmenu === '__group_categories__') return <ManageServiceProvidersPage onSelect={onSelectCategory} />;
     if (activeSubmenu === '__group_actions__') return <ActionsPage onSelect={onSelectCategory} />;
@@ -123,6 +157,7 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
     return <VendorOverview onSelectCategory={onSelectCategory} />;
   }
   
+  // Bookings Section
   if (activeMenu === 'bookings') {
     // Handle Detailed Booking View with selected booking
     if (activeSubmenu === 'Detailed Booking View' && selectedBooking) {
@@ -132,11 +167,9 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
           onBack={handleBackFromBookingDetail}
           onUpdateStatus={(id, status) => {
             console.log(`Update booking ${id} status to ${status}`);
-            // API call would go here
           }}
           onUpdatePayment={(id, payment) => {
             console.log(`Update booking ${id} payment to ${payment}`);
-            // API call would go here
           }}
         />
       );
@@ -152,13 +185,25 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
     return <BookingManagementPage onSelectBooking={handleViewBooking} />;
   }
   
-  if (activeMenu === 'payments') return <PaymentsTransactionsPage />;
+  // Payments Section - Updated with all payment pages including main page and subpages
+  if (activeMenu === 'payments') {
+    // Check if we have a specific payment page component
+    const PaymentPage = PAYMENT_PAGES[activeSubmenu];
+    if (PaymentPage) {
+      return <PaymentPage />;
+    }
+    // Default to Payments & Transactions main page
+    return <PaymentsTransactionsPage />;
+  }
+  
+  // Other Sections
   if (activeMenu === 'complaints') return <ComplaintsDisputesPage />;
   if (activeMenu === 'analytics') return <AnalyticsReportsPage />;
   if (activeMenu === 'roles') return <AdminRolesPage />;
   if (activeMenu === 'notifications') return <NotificationsPage />;
   if (activeMenu === 'settings') return <SettingsPage />;
   
+  // Fallback for unknown pages
   return (
     <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 min-h-64 flex flex-col items-center justify-center text-center">
       <div className="text-5xl mb-4">🚧</div>
