@@ -346,9 +346,9 @@ const StatusTimeline = ({ bookings }) => {
               {index < statusFlow.length - 1 && (
                 <>
                   <div className="absolute top-8 left-1/2 w-full h-0.5 bg-gray-200 -z-10"></div>
-                  <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-gray-100 to-gray-50 px-3 py-1 rounded-full text-xs font-bold text-gray-600 whitespace-nowrap shadow-sm">
+                  {/* <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-gray-100 to-gray-50 px-3 py-1 rounded-full text-xs font-bold text-gray-600 whitespace-nowrap shadow-sm">
                     {getConversionRate(status, statusFlow[index + 1])}% CR
-                  </div>
+                  </div> */}
                 </>
               )}
             </div>
