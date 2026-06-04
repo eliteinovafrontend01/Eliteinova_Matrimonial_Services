@@ -3,6 +3,26 @@ import { useState, useEffect } from 'react';
 import { Icon } from '../shared/Icon';
 import { ICONS } from '../../../constants/admin/icons';
 
+// Helper function to format currency with appropriate units
+const formatCurrency = (amount) => {
+  // Extract numeric value if string with ₹ symbol is passed
+  let numericAmount = amount;
+  if (typeof amount === 'string') {
+    numericAmount = parseFloat(amount.replace(/[^0-9.-]/g, ''));
+    if (isNaN(numericAmount)) return amount;
+  }
+  
+  if (numericAmount >= 10000000) { // 1 Crore = 10,000,000
+    return `₹${(numericAmount / 10000000).toFixed(2)}Cr`;
+  } else if (numericAmount >= 100000) { // 1 Lakh = 100,000
+    return `₹${(numericAmount / 100000).toFixed(2)}L`;
+  } else if (numericAmount >= 1000) { // 1 Thousand = 1,000
+    return `₹${(numericAmount / 1000).toFixed(1)}K`;
+  } else {
+    return `₹${numericAmount}`;
+  }
+};
+
 const razorpayConfig = {
   id: 'razorpay',
   name: 'Razorpay',
@@ -25,8 +45,8 @@ const razorpayConfig = {
   settlement: {
     cycle: 'T+2 days',
     nextSettlement: '2024-01-20',
-    pendingAmount: '₹45,000',
-    settledThisMonth: '₹8,50,000'
+    pendingAmount: 45000,
+    settledThisMonth: 850000
   },
   supportedCurrencies: ['INR', 'USD', 'EUR', 'GBP'],
   webhookEvents: ['payment.captured', 'payment.failed', 'refund.created', 'order.paid'],
@@ -150,11 +170,11 @@ const ConfigureRazorpayModal = ({ config, onClose, onSave }) => {
 // Webhook Events Modal
 const WebhookEventsModal = ({ onClose }) => {
   const [events, setEvents] = useState([
-    { id: 1, event: 'payment.captured', timestamp: '2024-01-15 10:30:00', status: 'Success', amount: '₹25,000', bookingId: 'BKG001', paymentId: 'pay_xyz123' },
-    { id: 2, event: 'payment.failed', timestamp: '2024-01-14 15:20:00', status: 'Failed', amount: '₹1,50,000', bookingId: 'BKG003', paymentId: 'pay_failed456', reason: 'Insufficient funds' },
-    { id: 3, event: 'refund.created', timestamp: '2024-01-13 09:45:00', status: 'Success', amount: '₹35,000', bookingId: 'BKG004', paymentId: 'pay_refund789' },
-    { id: 4, event: 'order.paid', timestamp: '2024-01-12 14:30:00', status: 'Success', amount: '₹45,000', bookingId: 'BKG002', paymentId: 'pay_order456' },
-    { id: 5, event: 'payment.authorized', timestamp: '2024-01-11 11:15:00', status: 'Success', amount: '₹75,000', bookingId: 'BKG006', paymentId: 'pay_auth123' },
+    { id: 1, event: 'payment.captured', timestamp: '2024-01-15 10:30:00', status: 'Success', amount: 25000, bookingId: 'BKG001', paymentId: 'pay_xyz123' },
+    { id: 2, event: 'payment.failed', timestamp: '2024-01-14 15:20:00', status: 'Failed', amount: 150000, bookingId: 'BKG003', paymentId: 'pay_failed456', reason: 'Insufficient funds' },
+    { id: 3, event: 'refund.created', timestamp: '2024-01-13 09:45:00', status: 'Success', amount: 35000, bookingId: 'BKG004', paymentId: 'pay_refund789' },
+    { id: 4, event: 'order.paid', timestamp: '2024-01-12 14:30:00', status: 'Success', amount: 45000, bookingId: 'BKG002', paymentId: 'pay_order456' },
+    { id: 5, event: 'payment.authorized', timestamp: '2024-01-11 11:15:00', status: 'Success', amount: 75000, bookingId: 'BKG006', paymentId: 'pay_auth123' },
   ]);
 
   const [filter, setFilter] = useState('all');
@@ -189,14 +209,14 @@ const WebhookEventsModal = ({ onClose }) => {
                 <th className="py-2">Amount</th>
                 <th className="py-2">Booking ID</th>
                 <th className="py-2">Status</th>
-              </tr>
+               </tr>
             </thead>
             <tbody>
               {filteredEvents.map(event => (
                 <tr key={event.id} className="border-b hover:bg-gray-50">
                   <td className="py-2 font-mono text-xs">{event.event}</td>
                   <td className="py-2 text-xs">{event.timestamp}</td>
-                  <td className="py-2 font-semibold">{event.amount}</td>
+                  <td className="py-2 font-semibold">{formatCurrency(event.amount)}</td>
                   <td className="py-2 text-xs font-mono">{event.bookingId}</td>
                   <td className="py-2">
                     <span className={`px-2 py-0.5 rounded-full text-xs ${
@@ -229,7 +249,7 @@ const TestPaymentModal = ({ onClose, onTest }) => {
   const handleSubmit = async () => {
     setIsProcessing(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
-    onTest({ amount, paymentMethod });
+    onTest({ amount: parseFloat(amount), paymentMethod });
     setIsProcessing(false);
     onClose();
   };
@@ -432,7 +452,7 @@ export const PaymentGatewayIntegration = () => {
   };
 
   const handleTestPayment = (data) => {
-    showToastMsg(`Test payment of ₹${data.amount} via ${data.paymentMethod} successful!`, 'success');
+    showToastMsg(`Test payment of ${formatCurrency(data.amount)} via ${data.paymentMethod} successful!`, 'success');
   };
 
   const handleUpdatePaymentMethods = (data) => {
@@ -538,7 +558,7 @@ export const PaymentGatewayIntegration = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 border-b bg-gray-50">
           <div>
             <p className="text-xs text-gray-400">Total Volume (MTD)</p>
-            <p className="text-xl font-bold text-gray-800">₹8.50L</p>
+            <p className="text-xl font-bold text-gray-800">{formatCurrency(850000)}</p>
             <p className="text-xs text-green-600">↑ +12.5%</p>
           </div>
           <div>
@@ -553,7 +573,7 @@ export const PaymentGatewayIntegration = () => {
           </div>
           <div>
             <p className="text-xs text-gray-400">Total Fees Paid</p>
-            <p className="text-xl font-bold text-gray-800">₹17,000</p>
+            <p className="text-xl font-bold text-gray-800">{formatCurrency(17000)}</p>
             <p className="text-xs text-amber-600">This month</p>
           </div>
         </div>
@@ -589,7 +609,7 @@ export const PaymentGatewayIntegration = () => {
               </div>
               <div className="bg-gray-50 p-3 rounded-lg">
                 <p className="text-xs text-gray-400">Pending Settlement</p>
-                <p className="font-semibold text-amber-600">{config.settlement.pendingAmount}</p>
+                <p className="font-semibold text-amber-600">{formatCurrency(config.settlement.pendingAmount)}</p>
               </div>
             </div>
           </div>
@@ -677,7 +697,7 @@ export const PaymentGatewayIntegration = () => {
             <li className="flex items-start gap-2">7️⃣ <span>Configure settlement preferences</span></li>
             <li className="flex items-start gap-2">8️⃣ <span>Test in test mode with card: 4111 1111 1111 1111</span></li>
             <li className="flex items-start gap-2">9️⃣ <span>Switch to Live mode after successful testing</span></li>
-            <li className="flex items-start gap-2">🔟 <span>Monitor transactions and webhook events</span></li>
+            <li className="flex-items-start gap-2">🔟 <span>Monitor transactions and webhook events</span></li>
           </ul>
         </div>
       </div>

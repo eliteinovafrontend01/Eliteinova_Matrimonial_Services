@@ -6,6 +6,19 @@ import { PaymentBadge } from '../shared/PaymentBadge';
 import { FeatureCard } from '../shared/FeatureCard';
 import { ICONS } from '../../../constants/admin/icons';
 
+// Helper function to format currency with appropriate units
+const formatCurrency = (amount) => {
+  if (amount >= 10000000) { // 1 Crore = 10,000,000
+    return `₹${(amount / 10000000).toFixed(2)}Cr`;
+  } else if (amount >= 100000) { // 1 Lakh = 100,000
+    return `₹${(amount / 100000).toFixed(2)}L`;
+  } else if (amount >= 1000) { // 1 Thousand = 1,000
+    return `₹${(amount / 1000).toFixed(1)}K`;
+  } else {
+    return `₹${amount}`;
+  }
+};
+
 // Loading Spinner Component
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center p-12">
@@ -124,7 +137,7 @@ const ActionModal = ({ request, actionType, onConfirm, onClose }) => {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Original Amount:</span>
-              <span className="font-semibold">₹{request?.amount?.toLocaleString()}</span>
+              <span className="font-semibold">{formatCurrency(request?.amount)}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Reason:</span>
@@ -324,7 +337,7 @@ const RefundDetailsModal = ({ refund, onClose }) => {
             </div>
             <div className="flex justify-between py-2 border-b">
               <span className="text-sm text-gray-500">Refund Amount</span>
-              <span className="text-sm font-bold text-green-600">₹{refund.amount.toLocaleString()}</span>
+              <span className="text-sm font-bold text-green-600">{formatCurrency(refund.amount)}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
               <span className="text-sm text-gray-500">Refund Date</span>
@@ -444,7 +457,7 @@ export const CancellationRefundPage = () => {
       }
       return req;
     }));
-    showToast(`Cancellation approved and refund of ₹${data.refundAmount.toLocaleString()} processed!`, 'success');
+    showToast(`Cancellation approved and refund of ${formatCurrency(data.refundAmount)} processed!`, 'success');
   };
 
   const handleRejectRequest = (requestId, action, data) => {
@@ -472,7 +485,7 @@ export const CancellationRefundPage = () => {
         remarks: data.remarks
       };
       setApprovedRefunds(prev => [...prev, newRefund]);
-      showToast(`Refund of ₹${data.refundAmount.toLocaleString()} processed successfully!`, 'success');
+      showToast(`Refund of ${formatCurrency(data.refundAmount)} processed successfully!`, 'success');
     }
   };
 
@@ -489,7 +502,7 @@ export const CancellationRefundPage = () => {
     { label: 'Cancellation Requests', value: stats.pendingRequests, icon: '🎫', color: 'border-amber-400' },
     { label: 'Approved Refunds', value: stats.approvedCount, icon: '✅', color: 'border-green-400' },
     { label: 'Pending Refunds', value: stats.pendingRefunds, icon: '⏳', color: 'border-blue-400' },
-    { label: 'Total Refunded', value: `₹${(stats.totalRefunded / 1000).toFixed(0)}K`, icon: '💰', color: 'border-purple-400' },
+    { label: 'Total Refunded', value: formatCurrency(stats.totalRefunded), icon: '💰', color: 'border-purple-400' },
   ];
 
   const featureCards = [
@@ -667,7 +680,7 @@ export const CancellationRefundPage = () => {
                     <td className="px-4 py-3 text-xs text-gray-600 max-w-xs truncate" title={req.reason}>
                       {req.reason}
                     </td>
-                    <td className="px-4 py-3 text-xs font-bold text-gray-800">₹{req.amount.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-xs font-bold text-gray-800">{formatCurrency(req.amount)}</td>
                     <td className="px-4 py-3">
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
                         req.status === 'Pending' ? 'bg-amber-100 text-amber-700' :
@@ -781,7 +794,7 @@ export const CancellationRefundPage = () => {
                     <td className="px-4 py-3 text-xs font-mono text-gray-500">{refund.id}</td>
                     <td className="px-4 py-3 text-xs font-mono text-gray-500">{refund.bookingId}</td>
                     <td className="px-4 py-3 text-sm font-semibold text-gray-700">{refund.customer}</td>
-                    <td className="px-4 py-3 text-sm font-bold text-green-600">₹{refund.amount.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-sm font-bold text-green-600">{formatCurrency(refund.amount)}</td>
                     <td className="px-4 py-3 text-xs text-gray-400">{refund.date}</td>
                     <td className="px-4 py-3">
                       <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700">Completed</span>

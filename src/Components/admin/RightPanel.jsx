@@ -1,3 +1,4 @@
+// src/components/admin/layout/RightPanel.jsx
 import React, { useState } from 'react';
 import { DashboardOverview } from './dashboard/DashboardOverview';
 import { CustomerManagementPage } from './customers/CustomerManagement';
@@ -57,8 +58,21 @@ import { FraudDetectionSecurity } from './payments/FraudDetectionSecurity';
 import { SearchFiltersPayments } from './payments/SearchFiltersPayments';
 import { ReportsAnalytics } from './payments/ReportsAnalytics';
 
-// Other Pages
+// Complaint & Dispute Management Pages
 import { ComplaintsDisputesPage } from './complaints/ComplaintsDisputesPage';
+import { ComplaintRegistration } from './complaints/ComplaintRegistration';
+import { TicketManagementSystem } from './complaints/TicketManagementSystem';
+import { IssueCategorization } from './complaints/IssueCategorization';
+import { StatusTracking } from './complaints/StatusTracking';
+import { DetailedCaseView } from './complaints/DetailedCaseView';
+import { CommunicationLogs } from './complaints/CommunicationLogs';
+import { DisputeResolutionWorkflow } from './complaints/DisputeResolutionWorkflow';
+import { EscalationManagement } from './complaints/EscalationManagement';
+import { AdminActions } from './complaints/AdminActions';
+import { NotificationsUpdates } from './complaints/NotificationsUpdates';
+import { ReportsInsights } from './complaints/ReportsInsights';
+
+// Other Pages
 import { AnalyticsReportsPage } from './analytics/AnalyticsReportsPage';
 import { AdminRolesPage } from './roles/AdminRolesPage';
 import { NotificationsPage } from './notifications/NotificationsPage';
@@ -115,6 +129,22 @@ const PAYMENT_PAGES = {
   'Fraud Detection & Security': FraudDetectionSecurity,
   'Search & Filters': SearchFiltersPayments,
   'Reports & Analytics': ReportsAnalytics,
+};
+
+// Complaint & Dispute Management Pages Mapping
+const COMPLAINT_PAGES = {
+  'Complaints & Disputes Dashboard': ComplaintsDisputesPage,
+  'Complaint Registration': ComplaintRegistration,
+  'Ticket Management System': TicketManagementSystem,
+  'Issue Categorization': IssueCategorization,
+  'Status Tracking': StatusTracking,
+  'Detailed Case View': DetailedCaseView,
+  'Communication & Interaction Logs': CommunicationLogs,
+  'Dispute Resolution Workflow': DisputeResolutionWorkflow,
+  'Escalation Management': EscalationManagement,
+  'Admin Actions': AdminActions,
+  'Notifications & Updates': NotificationsUpdates,
+  'Reports & Insights': ReportsInsights,
 };
 
 export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavigate, selectedBooking, setSelectedBooking }) => {
@@ -196,8 +226,17 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
     return <PaymentsTransactionsPage />;
   }
   
-  // Other Sections
-  if (activeMenu === 'complaints') return <ComplaintsDisputesPage />;
+  // Complaints & Disputes Section
+  if (activeMenu === 'complaints') {
+    // Check if we have a specific complaint page component
+    const ComplaintPage = COMPLAINT_PAGES[activeSubmenu];
+    if (ComplaintPage) {
+      return <ComplaintPage />;
+    }
+    // Default to Complaints & Disputes Dashboard
+    return <ComplaintsDisputesPage />;
+  }
+  
   if (activeMenu === 'analytics') return <AnalyticsReportsPage />;
   if (activeMenu === 'roles') return <AdminRolesPage />;
   if (activeMenu === 'notifications') return <NotificationsPage />;

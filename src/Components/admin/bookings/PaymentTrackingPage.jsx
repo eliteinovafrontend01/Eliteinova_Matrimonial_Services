@@ -29,6 +29,19 @@ const ErrorMessage = ({ message, onRetry }) => (
   </div>
 );
 
+// Helper function to format currency with appropriate units
+const formatCurrency = (amount) => {
+  if (amount >= 10000000) { // 1 Crore = 10,000,000
+    return `₹${(amount / 10000000).toFixed(2)}Cr`;
+  } else if (amount >= 100000) { // 1 Lakh = 100,000
+    return `₹${(amount / 100000).toFixed(2)}L`;
+  } else if (amount >= 1000) { // 1 Thousand = 1,000
+    return `₹${(amount / 1000).toFixed(1)}K`;
+  } else {
+    return `₹${amount}`;
+  }
+};
+
 // Payment Details Modal
 const PaymentDetailsModal = ({ payment, onClose, onProcessPayment, onProcessRefund }) => {
   const [paymentAmount, setPaymentAmount] = useState('');
@@ -82,15 +95,15 @@ const PaymentDetailsModal = ({ payment, onClose, onProcessPayment, onProcessRefu
           <div className="space-y-3">
             <div className="flex justify-between py-2 border-b">
               <span className="text-sm text-gray-500">Total Amount</span>
-              <span className="text-sm font-bold text-gray-800">₹{payment.amount.toLocaleString()}</span>
+              <span className="text-sm font-bold text-gray-800">{formatCurrency(payment.amount)}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
               <span className="text-sm text-gray-500">Paid Amount</span>
-              <span className="text-sm font-bold text-green-600">₹{payment.paid.toLocaleString()}</span>
+              <span className="text-sm font-bold text-green-600">{formatCurrency(payment.paid)}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
               <span className="text-sm text-gray-500">Balance</span>
-              <span className="text-sm font-bold text-red-600">₹{balance.toLocaleString()}</span>
+              <span className="text-sm font-bold text-red-600">{formatCurrency(balance)}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
               <span className="text-sm text-gray-500">Payment Status</span>
@@ -138,7 +151,7 @@ const PaymentDetailsModal = ({ payment, onClose, onProcessPayment, onProcessRefu
                   value={paymentAmount}
                   onChange={(e) => setPaymentAmount(e.target.value)}
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-300"
-                  placeholder={`Max: ₹${balance.toLocaleString()}`}
+                  placeholder={`Max: ${formatCurrency(balance)}`}
                   max={balance}
                   required
                 />
@@ -178,7 +191,7 @@ const PaymentDetailsModal = ({ payment, onClose, onProcessPayment, onProcessRefu
           {showRefundForm && (
             <form onSubmit={handleRefundSubmit} className="space-y-4">
               <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
-                ⚠️ Refund amount: ₹{payment.paid.toLocaleString()}
+                ⚠️ Refund amount: {formatCurrency(payment.paid)}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Refund Reason</label>
@@ -251,7 +264,7 @@ const TransactionHistoryModal = ({ transactions, onClose }) => {
                       {tx.reason && <p className="text-xs text-gray-500">Reason: {tx.reason}</p>}
                     </div>
                     <p className={`text-lg font-bold ${tx.type === 'Payment' ? 'text-green-600' : 'text-red-600'}`}>
-                      {tx.type === 'Payment' ? '+' : '-'} ₹{tx.amount.toLocaleString()}
+                      {tx.type === 'Payment' ? '+' : '-'} {formatCurrency(tx.amount)}
                     </p>
                   </div>
                 </div>
@@ -383,7 +396,7 @@ export const PaymentTrackingPage = () => {
       }
       return p;
     }));
-    showToast(`Payment of ₹${amount.toLocaleString()} received successfully!`, 'success');
+    showToast(`Payment of ${formatCurrency(amount)} received successfully!`, 'success');
   };
 
   const handleProcessRefund = (bookingId, amount, reason) => {
@@ -393,7 +406,7 @@ export const PaymentTrackingPage = () => {
       }
       return p;
     }));
-    showToast(`Refund of ₹${amount.toLocaleString()} processed successfully!`, 'success');
+    showToast(`Refund of ${formatCurrency(amount)} processed successfully!`, 'success');
   };
 
   const exportToCSV = () => {
@@ -435,10 +448,10 @@ export const PaymentTrackingPage = () => {
   };
 
   const statCards = [
-    { label: 'Total Revenue', value: `₹${(stats.totalRevenue / 100000).toFixed(2)}L`, icon: '💰', color: 'border-green-400' },
-    { label: 'Pending Payments', value: `₹${(stats.pendingPayments / 1000).toFixed(0)}K`, icon: '⏳', color: 'border-amber-400' },
-    { label: 'Partial Payments', value: `₹${(stats.partialPayments / 1000).toFixed(0)}K`, icon: '🔄', color: 'border-blue-400' },
-    { label: "Today's Collection", value: `₹${(stats.todayCollection / 1000).toFixed(0)}K`, icon: '📅', color: 'border-purple-400' },
+    { label: 'Total Revenue', value: formatCurrency(stats.totalRevenue), icon: '💰', color: 'border-green-400' },
+    { label: 'Pending Payments', value: formatCurrency(stats.pendingPayments), icon: '⏳', color: 'border-amber-400' },
+    { label: 'Partial Payments', value: formatCurrency(stats.partialPayments), icon: '🔄', color: 'border-blue-400' },
+    { label: "Today's Collection", value: formatCurrency(stats.todayCollection), icon: '📅', color: 'border-purple-400' },
   ];
 
   const featureCards = [
@@ -615,10 +628,10 @@ export const PaymentTrackingPage = () => {
                           </div>
                           <span className="text-sm font-semibold text-gray-700">{p.customer}</span>
                         </div>
-                      </td>
-                      <td className="px-4 py-3 text-sm font-bold text-gray-800">₹{p.amount.toLocaleString()}</td>
-                      <td className="px-4 py-3 text-sm font-semibold text-green-600">₹{p.paid.toLocaleString()}</td>
-                      <td className="px-4 py-3 text-sm font-semibold text-red-600">₹{balance.toLocaleString()}</td>
+                       </td>
+                      <td className="px-4 py-3 text-sm font-bold text-gray-800">{formatCurrency(p.amount)}</td>
+                      <td className="px-4 py-3 text-sm font-semibold text-green-600">{formatCurrency(p.paid)}</td>
+                      <td className="px-4 py-3 text-sm font-semibold text-red-600">{formatCurrency(balance)}</td>
                       <td className="px-4 py-3"><PaymentBadge status={p.status} /></td>
                       <td className="px-4 py-3 text-xs text-gray-500">{p.dueDate}</td>
                       <td className="px-4 py-3">
@@ -632,7 +645,7 @@ export const PaymentTrackingPage = () => {
                         >
                           <Icon d={ICONS.eye} size={14} />
                         </button>
-                      </td>
+                       </td>
                     </tr>
                   );
                 })
@@ -668,15 +681,15 @@ export const PaymentTrackingPage = () => {
                   <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
                     <div>
                       <span className="text-gray-400">Total:</span>
-                      <span className="text-gray-800 font-bold ml-1">₹{p.amount.toLocaleString()}</span>
+                      <span className="text-gray-800 font-bold ml-1">{formatCurrency(p.amount)}</span>
                     </div>
                     <div>
                       <span className="text-gray-400">Paid:</span>
-                      <span className="text-green-600 font-semibold ml-1">₹{p.paid.toLocaleString()}</span>
+                      <span className="text-green-600 font-semibold ml-1">{formatCurrency(p.paid)}</span>
                     </div>
                     <div>
                       <span className="text-gray-400">Balance:</span>
-                      <span className="text-red-600 font-semibold ml-1">₹{balance.toLocaleString()}</span>
+                      <span className="text-red-600 font-semibold ml-1">{formatCurrency(balance)}</span>
                     </div>
                     <div>
                       <span className="text-gray-400">Due Date:</span>
@@ -717,7 +730,7 @@ export const PaymentTrackingPage = () => {
               </span>
             </div>
             <span className="text-gray-400">
-              Total Revenue: <span className="font-bold text-gray-800">₹{(stats.totalRevenue / 100000).toFixed(2)}L</span>
+              Total Revenue: <span className="font-bold text-gray-800">{formatCurrency(stats.totalRevenue)}</span>
             </span>
           </div>
         </div>

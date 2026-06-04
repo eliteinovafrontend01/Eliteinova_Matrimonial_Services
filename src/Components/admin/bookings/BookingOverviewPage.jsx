@@ -487,6 +487,19 @@ export const BookingOverviewPage = ({ onSelect }) => {
     return { total, today, pending, completed, cancelled, revenue };
   }, [bookings]);
   
+  // Helper function to format revenue with appropriate units
+  const formatRevenue = (amount) => {
+    if (amount >= 10000000) { // 1 Crore = 10,000,000
+      return `₹${(amount / 10000000).toFixed(2)}Cr`;
+    } else if (amount >= 100000) { // 1 Lakh = 100,000
+      return `₹${(amount / 100000).toFixed(2)}L`;
+    } else if (amount >= 1000) { // 1 Thousand = 1,000
+      return `₹${(amount / 1000).toFixed(1)}K`;
+    } else {
+      return `₹${amount}`;
+    }
+  };
+  
   // Memoized filter logic
   const filtered = useMemo(() => {
     try {
@@ -651,7 +664,7 @@ export const BookingOverviewPage = ({ onSelect }) => {
     { label: 'Pending Bookings', value: stats.pending.toLocaleString(), icon: '⏳', color: 'border-amber-400', filter: 'Pending' },
     { label: 'Completed Bookings', value: stats.completed.toLocaleString(), icon: '✅', color: 'border-emerald-400', filter: 'Completed' },
     { label: 'Cancelled Bookings', value: stats.cancelled.toLocaleString(), icon: '❌', color: 'border-red-400', filter: 'Cancelled' },
-    { label: 'Revenue Generated', value: `₹${(stats.revenue / 10000000).toFixed(2)}Cr`, icon: '💰', color: 'border-purple-400', filter: null },
+    { label: 'Revenue Generated', value: formatRevenue(stats.revenue), icon: '💰', color: 'border-purple-400', filter: null },
   ];
   
   const featureCards = [
@@ -864,7 +877,7 @@ export const BookingOverviewPage = ({ onSelect }) => {
                 <th className="px-4 py-3 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider whitespace-nowrap">Status</th>
                 <th className="px-4 py-3 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider whitespace-nowrap">Payment</th>
                 <th className="px-4 py-3 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider whitespace-nowrap">Actions</th>
-              </tr>
+               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
               {paginatedData.length === 0 ? (

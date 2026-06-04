@@ -6,6 +6,19 @@ import { FeatureCard } from '../shared/FeatureCard';
 import { allBookingsData } from '../../../data/admin/bookings';
 import { ICONS } from '../../../constants/admin/icons';
 
+// Helper function to format currency with appropriate units
+const formatCurrency = (amount) => {
+  if (amount >= 10000000) { // 1 Crore = 10,000,000
+    return `₹${(amount / 10000000).toFixed(2)}Cr`;
+  } else if (amount >= 100000) { // 1 Lakh = 100,000
+    return `₹${(amount / 100000).toFixed(2)}L`;
+  } else if (amount >= 1000) { // 1 Thousand = 1,000
+    return `₹${(amount / 1000).toFixed(1)}K`;
+  } else {
+    return `₹${amount}`;
+  }
+};
+
 // Loading Spinner Component
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center p-12">
@@ -83,15 +96,15 @@ const InvoiceDetailsModal = ({ invoice, onClose, onDownload, onEmail }) => {
               <tbody>
                 <tr className="border-b">
                   <td className="py-2 text-xs">Event Booking Service</td>
-                  <td className="py-2 text-xs text-right">₹{invoice.amount.toLocaleString()}</td>
+                  <td className="py-2 text-xs text-right">{formatCurrency(invoice.amount)}</td>
                 </tr>
                 <tr className="border-b">
                   <td className="py-2 text-xs">GST (18%)</td>
-                  <td className="py-2 text-xs text-right">₹{invoice.gst.toLocaleString()}</td>
+                  <td className="py-2 text-xs text-right">{formatCurrency(invoice.gst)}</td>
                 </tr>
                 <tr className="font-bold">
                   <td className="py-2 text-sm">Total</td>
-                  <td className="py-2 text-sm text-right">₹{invoice.total.toLocaleString()}</td>
+                  <td className="py-2 text-sm text-right">{formatCurrency(invoice.total)}</td>
                 </tr>
               </tbody>
             </table>
@@ -242,15 +255,15 @@ const GenerateInvoiceModal = ({ bookings, onGenerate, onClose }) => {
             <div className="bg-gray-50 rounded-lg p-3 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Booking Amount:</span>
-                <span className="font-semibold">₹{amount.toLocaleString()}</span>
+                <span className="font-semibold">{formatCurrency(amount)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">GST (18%):</span>
-                <span className="font-semibold">₹{gst.toLocaleString()}</span>
+                <span className="font-semibold">{formatCurrency(gst)}</span>
               </div>
               <div className="flex justify-between text-sm pt-2 border-t">
                 <span className="font-bold">Total Amount:</span>
-                <span className="font-bold text-red-600">₹{total.toLocaleString()}</span>
+                <span className="font-bold text-red-600">{formatCurrency(total)}</span>
               </div>
             </div>
           )}
@@ -518,9 +531,9 @@ export const InvoiceBillingPage = () => {
 
   const statCards = [
     { label: 'Total Invoices', value: stats.totalInvoices, icon: '📄', color: 'border-blue-400' },
-    { label: 'Total Amount', value: `₹${(stats.totalAmount / 100000).toFixed(2)}L`, icon: '💰', color: 'border-green-400' },
-    { label: 'Paid Amount', value: `₹${(stats.paidAmount / 100000).toFixed(2)}L`, icon: '✅', color: 'border-emerald-400' },
-    { label: 'Pending Amount', value: `₹${(stats.pendingAmount / 1000).toFixed(0)}K`, icon: '⏳', color: 'border-amber-400' },
+    { label: 'Total Amount', value: formatCurrency(stats.totalAmount), icon: '💰', color: 'border-green-400' },
+    { label: 'Paid Amount', value: formatCurrency(stats.paidAmount), icon: '✅', color: 'border-emerald-400' },
+    { label: 'Pending Amount', value: formatCurrency(stats.pendingAmount), icon: '⏳', color: 'border-amber-400' },
   ];
 
   const featureCards = [
@@ -673,8 +686,8 @@ export const InvoiceBillingPage = () => {
                 <tr>
                   <td colSpan={10} className="px-4 py-12 text-center text-sm text-gray-400">
                     No invoices found for the selected filters.
-                   </td>
-                 </tr>
+                  </td>
+                </tr>
               ) : (
                 filtered.map(inv => (
                   <tr key={inv.id} className="hover:bg-gray-50 transition-colors">
@@ -691,9 +704,9 @@ export const InvoiceBillingPage = () => {
                     <td className="px-4 py-3">
                       <span className="text-xs font-semibold bg-red-50 text-red-700 px-2 py-0.5 rounded-lg">{inv.service}</span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-700">₹{inv.amount.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">₹{inv.gst.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-sm font-bold text-gray-800">₹{inv.total.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">{formatCurrency(inv.amount)}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">{formatCurrency(inv.gst)}</td>
+                    <td className="px-4 py-3 text-sm font-bold text-gray-800">{formatCurrency(inv.total)}</td>
                     <td className="px-4 py-3"><PaymentBadge status={inv.status} /></td>
                     <td className="px-4 py-3 text-xs text-gray-400">{inv.dueDate}</td>
                     <td className="px-4 py-3">
@@ -761,15 +774,15 @@ export const InvoiceBillingPage = () => {
                 <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
                   <div>
                     <span className="text-gray-400">Amount:</span>
-                    <span className="text-gray-800 ml-1">₹{inv.amount.toLocaleString()}</span>
+                    <span className="text-gray-800 ml-1">{formatCurrency(inv.amount)}</span>
                   </div>
                   <div>
                     <span className="text-gray-400">GST:</span>
-                    <span className="text-gray-800 ml-1">₹{inv.gst.toLocaleString()}</span>
+                    <span className="text-gray-800 ml-1">{formatCurrency(inv.gst)}</span>
                   </div>
                   <div>
                     <span className="text-gray-400">Total:</span>
-                    <span className="text-gray-800 font-bold ml-1">₹{inv.total.toLocaleString()}</span>
+                    <span className="text-gray-800 font-bold ml-1">{formatCurrency(inv.total)}</span>
                   </div>
                   <div>
                     <span className="text-gray-400">Due:</span>
@@ -823,7 +836,7 @@ export const InvoiceBillingPage = () => {
               </span>
             </div>
             <span className="text-gray-400">
-              Total Revenue: <span className="font-bold text-gray-800">₹{(stats.totalAmount / 100000).toFixed(2)}L</span>
+              Total Revenue: <span className="font-bold text-gray-800">{formatCurrency(stats.totalAmount)}</span>
             </span>
           </div>
         </div>

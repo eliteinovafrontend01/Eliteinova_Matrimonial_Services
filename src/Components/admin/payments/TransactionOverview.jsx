@@ -4,6 +4,19 @@ import { Icon } from '../shared/Icon';
 import { PaymentBadge } from '../shared/PaymentBadge';
 import { ICONS } from '../../../constants/admin/icons';
 
+// Helper function to format currency with appropriate units
+const formatCurrency = (amount) => {
+  if (amount >= 10000000) { // 1 Crore = 10,000,000
+    return `₹${(amount / 10000000).toFixed(2)}Cr`;
+  } else if (amount >= 100000) { // 1 Lakh = 100,000
+    return `₹${(amount / 100000).toFixed(2)}L`;
+  } else if (amount >= 1000) { // 1 Thousand = 1,000
+    return `₹${(amount / 1000).toFixed(1)}K`;
+  } else {
+    return `₹${amount}`;
+  }
+};
+
 // Mock transaction data
 const mockTransactions = [
   { id: 'TXN1001', bookingId: 'BKG001', customerName: 'Priya Sharma', serviceType: 'Wedding Photography', vendor: 'ABC Events', amount: 25000, paymentMethod: 'UPI', transactionDate: '2024-01-15', status: 'Paid', razorpayId: 'pay_xyz123' },
@@ -48,7 +61,7 @@ const TransactionDetailsModal = ({ transaction, onClose }) => {
             <div><label className="text-xs text-gray-400 font-bold">Customer</label><p className="font-semibold">{transaction.customerName}</p></div>
             <div><label className="text-xs text-gray-400 font-bold">Service</label><p>{transaction.serviceType}</p></div>
             <div><label className="text-xs text-gray-400 font-bold">Vendor</label><p>{transaction.vendor}</p></div>
-            <div><label className="text-xs text-gray-400 font-bold">Amount</label><p className="text-lg font-bold text-green-600">₹{transaction.amount.toLocaleString()}</p></div>
+            <div><label className="text-xs text-gray-400 font-bold">Amount</label><p className="text-lg font-bold text-green-600">{formatCurrency(transaction.amount)}</p></div>
             <div><label className="text-xs text-gray-400 font-bold">Payment Method</label><p>{transaction.paymentMethod}</p></div>
             <div><label className="text-xs text-gray-400 font-bold">Status</label><PaymentBadge status={transaction.status} /></div>
             <div><label className="text-xs text-gray-400 font-bold">Date</label><p>{transaction.transactionDate}</p></div>
@@ -157,7 +170,7 @@ export const TransactionOverview = () => {
           { label: 'Pending', value: stats.pending, icon: '⏳', color: 'border-amber-400', filter: 'Pending' },
           { label: 'Failed', value: stats.failed, icon: '❌', color: 'border-red-400', filter: 'Failed' },
           { label: 'Refunded', value: stats.refunded, icon: '🔄', color: 'border-purple-400', filter: 'Refunded' },
-          { label: 'Revenue', value: `₹${(stats.revenue / 100000).toFixed(2)}L`, icon: '💰', color: 'border-emerald-400' },
+          { label: 'Revenue', value: formatCurrency(stats.revenue), icon: '💰', color: 'border-emerald-400' },
         ].map((s, i) => (
           <div key={i} onClick={() => s.filter && setStatusFilter(s.filter)} className={`bg-white rounded-2xl p-5 shadow-sm border-l-4 ${s.color} ${s.filter ? 'cursor-pointer' : ''} transition-all hover:shadow-md ${statusFilter === s.filter ? 'ring-2 ring-red-400' : ''}`}>
             <div className="flex justify-between"><div><p className="text-xs font-semibold text-gray-400">{s.label}</p><p className="text-2xl font-bold">{s.value}</p></div><div className="text-2xl">{s.icon}</div></div>
@@ -179,7 +192,7 @@ export const TransactionOverview = () => {
           <table className="w-full">
             <thead className="bg-gray-50"><tr>{['ID', 'Booking', 'Customer', 'Service', 'Vendor', 'Amount', 'Method', 'Status', 'Date', 'Actions'].map(h => (<th key={h} className="px-4 py-3 text-left text-xs font-bold text-gray-400">{h}</th>))}</tr></thead>
             <tbody className="divide-y">
-              {paginatedData.map(t => (<tr key={t.id} className="hover:bg-gray-50"><td className="px-4 py-3 text-xs font-mono">{t.id}</td><td className="px-4 py-3 text-xs font-mono">{t.bookingId}</td><td className="px-4 py-3 text-sm font-semibold">{t.customerName}</td><td className="px-4 py-3 text-xs">{t.serviceType}</td><td className="px-4 py-3 text-xs">{t.vendor}</td><td className="px-4 py-3 text-sm font-bold">₹{t.amount.toLocaleString()}</td><td className="px-4 py-3 text-xs">{t.paymentMethod}</td><td className="px-4 py-3"><PaymentBadge status={t.status} /></td><td className="px-4 py-3 text-xs">{t.transactionDate}</td><td className="px-4 py-3"><button onClick={() => handleViewDetails(t)} className="p-1.5 rounded-lg hover:bg-blue-50"><Icon d={ICONS.eye} size={14} /></button></td></tr>))}
+              {paginatedData.map(t => (<tr key={t.id} className="hover:bg-gray-50"><td className="px-4 py-3 text-xs font-mono">{t.id}</td><td className="px-4 py-3 text-xs font-mono">{t.bookingId}</td><td className="px-4 py-3 text-sm font-semibold">{t.customerName}</td><td className="px-4 py-3 text-xs">{t.serviceType}</td><td className="px-4 py-3 text-xs">{t.vendor}</td><td className="px-4 py-3 text-sm font-bold">{formatCurrency(t.amount)}</td><td className="px-4 py-3 text-xs">{t.paymentMethod}</td><td className="px-4 py-3"><PaymentBadge status={t.status} /></td><td className="px-4 py-3 text-xs">{t.transactionDate}</td><td className="px-4 py-3"><button onClick={() => handleViewDetails(t)} className="p-1.5 rounded-lg hover:bg-blue-50"><Icon d={ICONS.eye} size={14} /></button></td></tr>))}
               {paginatedData.length === 0 && <tr><td colSpan={10} className="text-center py-8 text-gray-400">No transactions found</td></tr>}
             </tbody>
           </table>
@@ -187,6 +200,23 @@ export const TransactionOverview = () => {
 
         {totalPages > 1 && <div className="px-5 py-3 border-t flex justify-between"><p className="text-xs text-gray-400">Page {currentPage} of {totalPages}</p><div className="flex gap-1"><button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p-1)} className="px-3 py-1 text-sm border rounded">Previous</button><button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p+1)} className="px-3 py-1 text-sm border rounded">Next</button></div></div>}
       </div>
+
+      <style jsx>{`
+        @keyframes slideIn {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        
+        .animate-slide-in {
+          animation: slideIn 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };

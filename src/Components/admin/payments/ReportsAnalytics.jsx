@@ -1,5 +1,20 @@
 // src/components/admin/payments/ReportsAnalytics.jsx
 import { useState, useEffect } from 'react';
+import { Icon } from '../shared/Icon';
+import { ICONS } from '../../../constants/admin/icons';
+
+// Helper function to format currency with appropriate units
+const formatCurrency = (amount) => {
+  if (amount >= 10000000) { // 1 Crore = 10,000,000
+    return `₹${(amount / 10000000).toFixed(2)}Cr`;
+  } else if (amount >= 100000) { // 1 Lakh = 100,000
+    return `₹${(amount / 100000).toFixed(2)}L`;
+  } else if (amount >= 1000) { // 1 Thousand = 1,000
+    return `₹${(amount / 1000).toFixed(1)}K`;
+  } else {
+    return `₹${amount}`;
+  }
+};
 
 // Comprehensive Mock Data
 const mockData = {
@@ -109,9 +124,8 @@ const DateRangePicker = ({ range, setRange }) => (
   </div>
 );
 
-// Revenue Chart Component - FIXED
+// Revenue Chart Component
 const RevenueChart = ({ data, target }) => {
-  // Handle both formats: data.values OR data.revenue
   const values = data.values || data.revenue;
   const targetValues = target || data.target;
   
@@ -126,12 +140,12 @@ const RevenueChart = ({ data, target }) => {
       <div className="flex items-center gap-4 mb-4">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-500 rounded"></div>
-          <span className="text-xs">Actual Revenue</span>
+          <span className="text-xs font-medium text-gray-600">Actual Revenue</span>
         </div>
         {targetValues && (
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 border-2 border-blue-400 rounded-full"></div>
-            <span className="text-xs">Target</span>
+            <span className="text-xs font-medium text-gray-600">Target</span>
           </div>
         )}
       </div>
@@ -156,7 +170,7 @@ const RevenueChart = ({ data, target }) => {
                     style={{ height: `${height}px` }}
                   >
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-                      ₹{(values[i]/1000).toFixed(1)}K
+                      {formatCurrency(values[i])}
                     </div>
                   </div>
                 </div>
@@ -177,8 +191,8 @@ const TransactionChart = ({ data }) => {
   return (
     <div className="w-full">
       <div className="flex items-center gap-4 mb-4">
-        <div className="flex items-center gap-2"><div className="w-3 h-3 bg-green-500 rounded"></div><span className="text-xs">Successful</span></div>
-        <div className="flex items-center gap-2"><div className="w-3 h-3 bg-red-400 rounded"></div><span className="text-xs">Failed</span></div>
+        <div className="flex items-center gap-2"><div className="w-3 h-3 bg-green-500 rounded"></div><span className="text-xs font-medium text-gray-600">Successful</span></div>
+        <div className="flex items-center gap-2"><div className="w-3 h-3 bg-red-400 rounded"></div><span className="text-xs font-medium text-gray-600">Failed</span></div>
       </div>
       <div className="flex items-end gap-2 h-72 pt-4">
         {data.labels.map((label, i) => {
@@ -188,17 +202,21 @@ const TransactionChart = ({ data }) => {
             <div key={i} className="flex-1 flex flex-col items-center gap-2">
               <div className="w-full flex flex-col items-center gap-1">
                 <div 
-                  className="w-full bg-green-500 rounded-t transition-all duration-300 hover:opacity-90"
+                  className="w-full bg-green-500 rounded-t transition-all duration-300 hover:opacity-90 relative group"
                   style={{ height: `${successHeight}px` }}
                 >
-                  <div className="opacity-0 hover:opacity-100 transition-opacity text-center text-xs text-white pt-1">
-                    {data.success[i]}
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-0.5 rounded whitespace-nowrap">
+                    {data.success[i]} successful
                   </div>
                 </div>
                 <div 
-                  className="w-full bg-red-400 rounded-t transition-all duration-300 hover:opacity-90"
+                  className="w-full bg-red-400 rounded-t transition-all duration-300 hover:opacity-90 relative group"
                   style={{ height: `${failedHeight}px` }}
-                />
+                >
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-0.5 rounded whitespace-nowrap">
+                    {data.failed[i]} failed
+                  </div>
+                </div>
               </div>
               <span className="text-xs text-gray-500 font-medium">{label}</span>
             </div>
@@ -257,7 +275,7 @@ const DonutChart = ({ data }) => {
           <div key={i} className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
             <span className="text-xs text-gray-600">{item.name}</span>
-            <span className="text-xs font-bold">{item.percentage}%</span>
+            <span className="text-xs font-bold text-gray-800">{item.percentage}%</span>
           </div>
         ))}
       </div>
@@ -268,14 +286,16 @@ const DonutChart = ({ data }) => {
 // Line Chart Component for Trends
 const LineChart = ({ data, lines }) => {
   const maxValue = Math.max(...Object.values(lines).flat());
+  const colors = ['#ef4444', '#3b82f6', '#22c55e'];
+  const names = ['Revenue (₹L)', 'Customers', 'Avg Order Value'];
   
   return (
     <div className="w-full">
       <div className="flex items-center gap-4 mb-4 flex-wrap">
         {Object.entries(lines).map(([key, values], idx) => (
           <div key={key} className="flex items-center gap-2">
-            <div className={`w-3 h-0.5 bg-${idx === 0 ? 'red' : idx === 1 ? 'blue' : 'green'}-500`}></div>
-            <span className="text-xs capitalize">{key}</span>
+            <div className={`w-3 h-0.5 bg-${idx === 0 ? 'red' : idx === 1 ? 'blue' : 'green'}-500`} style={{ backgroundColor: colors[idx] }}></div>
+            <span className="text-xs font-medium text-gray-600">{names[idx]}</span>
           </div>
         ))}
       </div>
@@ -286,8 +306,6 @@ const LineChart = ({ data, lines }) => {
             const y = 190 - (value / maxValue) * 170;
             return `${x},${y}`;
           }).join(' ');
-          
-          const colors = ['#ef4444', '#3b82f6', '#22c55e'];
           
           return (
             <g key={key}>
@@ -301,15 +319,18 @@ const LineChart = ({ data, lines }) => {
               {values.map((value, i) => {
                 const x = (i / (values.length - 1)) * 780 + 10;
                 const y = 190 - (value / maxValue) * 170;
+                const displayValue = lineIdx === 0 ? formatCurrency(value * 1000) : lineIdx === 1 ? value : formatCurrency(value);
                 return (
-                  <circle
-                    key={`${key}-${i}`}
-                    cx={x}
-                    cy={y}
-                    r="3"
-                    fill={colors[lineIdx]}
-                    className="cursor-pointer hover:r-5 transition-all"
-                  />
+                  <g key={`${key}-${i}`}>
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r="3"
+                      fill={colors[lineIdx]}
+                      className="cursor-pointer hover:r-5 transition-all"
+                    />
+                    <title>{displayValue}</title>
+                  </g>
                 );
               })}
             </g>
@@ -334,7 +355,7 @@ export const ReportsAnalytics = () => {
   const [dateRange, setDateRange] = useState('month');
   const [reportType, setReportType] = useState('overview');
   const [showExportMenu, setShowExportMenu] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: '' });
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   
   const getRevenueData = () => {
     switch(dateRange) {
@@ -365,13 +386,13 @@ export const ReportsAnalytics = () => {
   const avgTransaction = totalTransactions > 0 ? Math.round(totalRevenue / totalTransactions) : 0;
   const successRate = Math.round((transactionData.success?.reduce((a,b) => a + b, 0) / totalTransactions) * 100) || 0;
   
-  const showToastMsg = (msg) => { 
-    setToast({ show: true, message: msg }); 
-    setTimeout(() => setToast({ show: false, message: '' }), 3000); 
+  const showToastMsg = (message, type = 'success') => { 
+    setToast({ show: true, message, type }); 
+    setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000); 
   };
   
   const handleExport = (format) => { 
-    showToastMsg(`Exporting ${reportType} report as ${format.toUpperCase()}`); 
+    showToastMsg(`Exporting ${reportType} report as ${format.toUpperCase()}`, 'success'); 
     setShowExportMenu(false); 
   };
   
@@ -380,31 +401,36 @@ export const ReportsAnalytics = () => {
   
   return (
     <div>
+      {/* Toast Notification */}
       {toast.show && (
-        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg animate-slide-in">
-          {toast.message}
+        <div className="fixed top-4 right-4 z-50 animate-slide-in">
+          <div className={`px-4 py-3 rounded-lg shadow-lg ${
+            toast.type === 'success' ? 'bg-green-500' : 'bg-orange-500'
+          } text-white`}>
+            {toast.message}
+          </div>
         </div>
       )}
       
-      {/* Header */}
+      {/* Header Section */}
       <div className="rounded-2xl p-6 mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200">
         <div className="flex justify-between items-center flex-wrap gap-3">
           <div className="flex items-center gap-4">
             <div className="text-4xl">📊</div>
             <div>
               <h3 className="text-xl font-bold text-gray-800">Reports & Analytics Dashboard</h3>
-              <p className="text-sm text-gray-500">Comprehensive financial reports, revenue summaries, vendor earnings, and payment trends</p>
+              <p className="text-sm text-gray-500 mt-0.5">Comprehensive financial reports, revenue summaries, vendor earnings, and payment trends</p>
             </div>
           </div>
           <div className="relative">
-            <button onClick={() => setShowExportMenu(!showExportMenu)} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2">
+            <button onClick={() => setShowExportMenu(!showExportMenu)} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 text-sm font-semibold">
               📥 Export Report
             </button>
             {showExportMenu && (
-              <div className="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg border z-10 overflow-hidden">
-                <button onClick={() => handleExport('pdf')} className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm">📄 PDF Document</button>
-                <button onClick={() => handleExport('excel')} className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm">📊 Excel Spreadsheet</button>
-                <button onClick={() => handleExport('csv')} className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm">📝 CSV File</button>
+              <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-100 z-10 overflow-hidden">
+                <button onClick={() => handleExport('pdf')} className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm transition-colors">📄 PDF Document</button>
+                <button onClick={() => handleExport('excel')} className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm transition-colors">📊 Excel Spreadsheet</button>
+                <button onClick={() => handleExport('csv')} className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm transition-colors">📝 CSV File</button>
               </div>
             )}
           </div>
@@ -433,40 +459,40 @@ export const ReportsAnalytics = () => {
       
       {/* KPI Cards - Always Visible */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-gradient-to-br from-white to-red-50 rounded-2xl p-5 shadow-sm border-l-4 border-red-500">
+        <div className="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-red-500 transition-all hover:shadow-md">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider">Total Revenue</p>
-              <p className="text-2xl font-bold text-gray-800">₹{(totalRevenue/100000).toFixed(2)}L</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Total Revenue</p>
+              <p className="text-2xl font-bold text-gray-800">{formatCurrency(totalRevenue)}</p>
               <p className="text-xs text-green-600 mt-1">↑ +12.5% vs last period</p>
             </div>
             <div className="text-3xl">💰</div>
           </div>
         </div>
-        <div className="bg-gradient-to-br from-white to-blue-50 rounded-2xl p-5 shadow-sm border-l-4 border-blue-500">
+        <div className="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-blue-500 transition-all hover:shadow-md">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider">Transactions</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Transactions</p>
               <p className="text-2xl font-bold text-gray-800">{totalTransactions}</p>
               <p className="text-xs text-green-600 mt-1">↑ +8.3% vs last period</p>
             </div>
             <div className="text-3xl">🔄</div>
           </div>
         </div>
-        <div className="bg-gradient-to-br from-white to-green-50 rounded-2xl p-5 shadow-sm border-l-4 border-green-500">
+        <div className="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-green-500 transition-all hover:shadow-md">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider">Average Order Value</p>
-              <p className="text-2xl font-bold text-gray-800">₹{avgTransaction.toLocaleString()}</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Average Order Value</p>
+              <p className="text-2xl font-bold text-gray-800">{formatCurrency(avgTransaction)}</p>
               <p className="text-xs text-green-600 mt-1">↑ +4.2% vs last period</p>
             </div>
             <div className="text-3xl">📊</div>
           </div>
         </div>
-        <div className="bg-gradient-to-br from-white to-purple-50 rounded-2xl p-5 shadow-sm border-l-4 border-purple-500">
+        <div className="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-purple-500 transition-all hover:shadow-md">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider">Success Rate</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Success Rate</p>
               <p className="text-2xl font-bold text-gray-800">{successRate}%</p>
               <p className="text-xs text-green-600 mt-1">↑ +2.1% vs last period</p>
             </div>
@@ -478,8 +504,10 @@ export const ReportsAnalytics = () => {
       {/* Overview Dashboard */}
       {reportType === 'overview' && (
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl shadow-sm border p-6">
-            <h4 className="font-bold text-gray-800 text-lg mb-4">📈 Revenue & Growth Trends</h4>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h4 className="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
+              <span className="text-2xl">📈</span> Revenue & Growth Trends
+            </h4>
             <LineChart 
               data={mockData.trends.months.slice(0, dateRange === 'year' ? 12 : 6)} 
               lines={{
@@ -491,20 +519,22 @@ export const ReportsAnalytics = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white rounded-2xl shadow-sm border p-6">
-              <h4 className="font-bold text-gray-800 mb-4">🏆 Top Performing Vendors</h4>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <span className="text-2xl">🏆</span> Top Performing Vendors
+              </h4>
               <div className="space-y-3">
                 {topVendors.map((vendor, i) => (
-                  <div key={vendor.id} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg">
+                  <div key={vendor.id} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
                     <div className="flex items-center gap-3">
                       <span className="text-lg font-bold text-gray-400 w-6">#{i+1}</span>
                       <div>
-                        <p className="font-semibold text-sm">{vendor.name}</p>
+                        <p className="font-semibold text-sm text-gray-800">{vendor.name}</p>
                         <p className="text-xs text-gray-400">{vendor.category}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-green-600">₹{(vendor.revenue/1000).toFixed(0)}K</p>
+                      <p className="font-bold text-green-600">{formatCurrency(vendor.revenue)}</p>
                       <p className="text-xs text-gray-400">{vendor.bookings} bookings</p>
                     </div>
                   </div>
@@ -512,17 +542,19 @@ export const ReportsAnalytics = () => {
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl shadow-sm border p-6">
-              <h4 className="font-bold text-gray-800 mb-4">🌍 Revenue by Location</h4>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <span className="text-2xl">🌍</span> Revenue by Location
+              </h4>
               <div className="space-y-3">
                 {mockData.locations.map(loc => (
                   <div key={loc.city}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span>{loc.city}</span>
-                      <span className="font-semibold">₹{(loc.revenue/1000).toFixed(0)}K ({loc.percentage}%)</span>
+                      <span className="font-medium text-gray-700">{loc.city}</span>
+                      <span className="font-semibold text-gray-800">{formatCurrency(loc.revenue)} ({loc.percentage}%)</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-red-500 h-2 rounded-full" style={{ width: `${loc.percentage}%` }}></div>
+                      <div className="bg-gradient-to-r from-red-500 to-orange-500 h-2 rounded-full transition-all" style={{ width: `${loc.percentage}%` }}></div>
                     </div>
                   </div>
                 ))}
@@ -532,25 +564,27 @@ export const ReportsAnalytics = () => {
         </div>
       )}
       
-      {/* Revenue Report - FIXED */}
+      {/* Revenue Report */}
       {reportType === 'revenue' && (
-        <div className="bg-white rounded-2xl shadow-sm border p-6">
-          <h4 className="font-bold text-gray-800 text-lg mb-4">💰 Revenue Analysis</h4>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h4 className="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
+            <span className="text-2xl">💰</span> Revenue Analysis
+          </h4>
           <RevenueChart data={{ labels: revenueData.labels, revenue: revenueData.revenue }} target={revenueData.target} />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-4 border-t">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-4 border-t border-gray-100">
             <div className="text-center p-3 bg-green-50 rounded-lg">
               <p className="text-xs text-gray-500">Highest Revenue</p>
-              <p className="font-bold text-green-600">₹{Math.max(...revenueData.revenue).toLocaleString()}</p>
-              <p className="text-xs">{revenueData.labels[revenueData.revenue.indexOf(Math.max(...revenueData.revenue))]}</p>
+              <p className="font-bold text-green-600">{formatCurrency(Math.max(...revenueData.revenue))}</p>
+              <p className="text-xs text-gray-500 mt-1">{revenueData.labels[revenueData.revenue.indexOf(Math.max(...revenueData.revenue))]}</p>
             </div>
             <div className="text-center p-3 bg-red-50 rounded-lg">
               <p className="text-xs text-gray-500">Lowest Revenue</p>
-              <p className="font-bold text-red-600">₹{Math.min(...revenueData.revenue).toLocaleString()}</p>
-              <p className="text-xs">{revenueData.labels[revenueData.revenue.indexOf(Math.min(...revenueData.revenue))]}</p>
+              <p className="font-bold text-red-600">{formatCurrency(Math.min(...revenueData.revenue))}</p>
+              <p className="text-xs text-gray-500 mt-1">{revenueData.labels[revenueData.revenue.indexOf(Math.min(...revenueData.revenue))]}</p>
             </div>
             <div className="text-center p-3 bg-blue-50 rounded-lg">
               <p className="text-xs text-gray-500">Average Revenue</p>
-              <p className="font-bold text-blue-600">₹{Math.round(revenueData.revenue.reduce((a,b)=>a+b,0)/revenueData.revenue.length).toLocaleString()}</p>
+              <p className="font-bold text-blue-600">{formatCurrency(Math.round(revenueData.revenue.reduce((a,b)=>a+b,0)/revenueData.revenue.length))}</p>
             </div>
           </div>
         </div>
@@ -558,10 +592,12 @@ export const ReportsAnalytics = () => {
       
       {/* Transactions Report */}
       {reportType === 'transactions' && (
-        <div className="bg-white rounded-2xl shadow-sm border p-6">
-          <h4 className="font-bold text-gray-800 text-lg mb-4">🔄 Transaction Analysis</h4>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h4 className="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
+            <span className="text-2xl">🔄</span> Transaction Analysis
+          </h4>
           <TransactionChart data={transactionData} />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-4 border-t">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-4 border-t border-gray-100">
             <div className="text-center p-3 bg-green-50 rounded-lg">
               <p className="text-xs text-gray-500">Success Rate</p>
               <p className="font-bold text-green-600">{successRate}%</p>
@@ -580,12 +616,14 @@ export const ReportsAnalytics = () => {
       
       {/* Vendors Report */}
       {reportType === 'vendors' && (
-        <div className="bg-white rounded-2xl shadow-sm border p-6">
-          <h4 className="font-bold text-gray-800 text-lg mb-4">🏢 Vendor Performance</h4>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h4 className="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
+            <span className="text-2xl">🏢</span> Vendor Performance
+          </h4>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="border-b">
-                <tr className="text-left text-xs text-gray-400">
+              <thead className="border-b border-gray-200">
+                <tr className="text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
                   <th className="pb-3">Vendor</th>
                   <th className="pb-3">Category</th>
                   <th className="pb-3 text-right">Revenue</th>
@@ -597,14 +635,14 @@ export const ReportsAnalytics = () => {
               </thead>
               <tbody>
                 {mockData.vendors.map(vendor => (
-                  <tr key={vendor.id} className="border-b hover:bg-gray-50">
-                    <td className="py-3 font-semibold">{vendor.name}</td>
-                    <td className="py-3 text-sm">{vendor.category}</td>
-                    <td className="py-3 text-right font-bold text-green-600">₹{(vendor.revenue/1000).toFixed(0)}K</td>
-                    <td className="py-3 text-right text-red-500">₹{(vendor.commission/1000).toFixed(0)}K</td>
-                    <td className="py-3 text-right">{vendor.bookings}</td>
+                  <tr key={vendor.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                    <td className="py-3 font-semibold text-gray-800">{vendor.name}</td>
+                    <td className="py-3 text-sm text-gray-600">{vendor.category}</td>
+                    <td className="py-3 text-right font-bold text-green-600">{formatCurrency(vendor.revenue)}</td>
+                    <td className="py-3 text-right text-red-500">{formatCurrency(vendor.commission)}</td>
+                    <td className="py-3 text-right text-gray-700">{vendor.bookings}</td>
                     <td className="py-3 text-right"><span className="text-yellow-500">★</span> {vendor.rating}</td>
-                    <td className="py-3 text-right"><span className={vendor.growth.startsWith('+') ? 'text-green-600' : 'text-red-600'}>{vendor.growth}</span></td>
+                    <td className="py-3 text-right"><span className={vendor.growth.startsWith('+') ? 'text-green-600 font-semibold' : 'text-red-600'}>{vendor.growth}</span></td>
                   </tr>
                 ))}
               </tbody>
@@ -616,18 +654,22 @@ export const ReportsAnalytics = () => {
       {/* Payments Report */}
       {reportType === 'payments' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl shadow-sm border p-6">
-            <h4 className="font-bold text-gray-800 mb-4">💳 Payment Method Distribution</h4>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="text-2xl">💳</span> Payment Method Distribution
+            </h4>
             <DonutChart data={mockData.paymentMethods.current} />
           </div>
-          <div className="bg-white rounded-2xl shadow-sm border p-6">
-            <h4 className="font-bold text-gray-800 mb-4">📊 Payment Trends Over Time</h4>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="text-2xl">📊</span> Payment Trends Over Time
+            </h4>
             <div className="space-y-3">
               {mockData.paymentMethods.historical.slice(-6).map((month, i) => (
                 <div key={i} className="text-sm">
                   <div className="flex justify-between mb-1">
-                    <span>{month.month}</span>
-                    <span>UPI: {month.UPI}% | Card: {month.Card}% | NB: {month.NetBanking}% | Wallet: {month.Wallet}%</span>
+                    <span className="font-semibold text-gray-700">{month.month}</span>
+                    <span className="text-xs text-gray-500">UPI: {month.UPI}% | Card: {month.Card}% | NB: {month.NetBanking}% | Wallet: {month.Wallet}%</span>
                   </div>
                   <div className="flex h-2 rounded-full overflow-hidden">
                     <div className="bg-red-500" style={{ width: `${month.UPI}%` }}></div>
@@ -645,53 +687,57 @@ export const ReportsAnalytics = () => {
       {/* Insights Report */}
       {reportType === 'insights' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl shadow-sm border p-6">
-            <h4 className="font-bold text-gray-800 mb-4">💡 Key Business Insights</h4>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="text-2xl">💡</span> Key Business Insights
+            </h4>
             <div className="space-y-4">
-              <div className="p-3 bg-blue-50 rounded-lg">
+              <div className="p-4 bg-blue-50 rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl">📅</span>
-                  <p className="font-semibold">Best Performing Day</p>
+                  <p className="font-semibold text-gray-800">Best Performing Day</p>
                 </div>
-                <p className="text-sm text-gray-600">Wednesday generates the highest revenue with an average of ₹1.56L, which is 45% higher than the weekly average.</p>
+                <p className="text-sm text-gray-600">Wednesday generates the highest revenue with an average of <span className="font-semibold">{formatCurrency(156700)}</span>, which is 45% higher than the weekly average.</p>
               </div>
-              <div className="p-3 bg-green-50 rounded-lg">
+              <div className="p-4 bg-green-50 rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl">🏆</span>
-                  <p className="font-semibold">Top Vendor Performance</p>
+                  <p className="font-semibold text-gray-800">Top Vendor Performance</p>
                 </div>
-                <p className="text-sm text-gray-600">Grand Palace leads with ₹3.5L revenue, contributing 15% of total platform revenue. Weddings category is the strongest segment.</p>
+                <p className="text-sm text-gray-600">Grand Palace leads with <span className="font-semibold">{formatCurrency(350000)}</span> revenue, contributing 15% of total platform revenue. Weddings category is the strongest segment.</p>
               </div>
-              <div className="p-3 bg-purple-50 rounded-lg">
+              <div className="p-4 bg-purple-50 rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl">💳</span>
-                  <p className="font-semibold">Payment Method Adoption</p>
+                  <p className="font-semibold text-gray-800">Payment Method Adoption</p>
                 </div>
                 <p className="text-sm text-gray-600">UPI has grown 44% adoption rate (+9% YoY), while card payments decreased by 14%. Focus on UPI-first payment experience.</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-2xl shadow-sm border p-6">
-            <h4 className="font-bold text-gray-800 mb-4">🎯 Actionable Recommendations</h4>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="text-2xl">🎯</span> Actionable Recommendations
+            </h4>
             <div className="space-y-4">
-              <div className="p-3 bg-amber-50 rounded-lg">
+              <div className="p-4 bg-amber-50 rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl">🚀</span>
-                  <p className="font-semibold">Boost Mid-Week Sales</p>
+                  <p className="font-semibold text-gray-800">Boost Mid-Week Sales</p>
                 </div>
                 <p className="text-sm text-gray-600">Launch "Wednesdays Wedding Special" campaign to capitalize on highest revenue day. Offer 5% discount on Wednesday bookings.</p>
               </div>
-              <div className="p-3 bg-indigo-50 rounded-lg">
+              <div className="p-4 bg-indigo-50 rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl">🏢</span>
-                  <p className="font-semibold">Vendor Incentive Program</p>
+                  <p className="font-semibold text-gray-800">Vendor Incentive Program</p>
                 </div>
                 <p className="text-sm text-gray-600">Top 3 vendors should receive priority support and reduced commission rates to maintain quality.</p>
               </div>
-              <div className="p-3 bg-teal-50 rounded-lg">
+              <div className="p-4 bg-teal-50 rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl">📱</span>
-                  <p className="font-semibold">Optimize Mobile Payments</p>
+                  <p className="font-semibold text-gray-800">Optimize Mobile Payments</p>
                 </div>
                 <p className="text-sm text-gray-600">Since 44% of payments are via UPI, ensure seamless mobile checkout experience. Add more UPI apps integration.</p>
               </div>
