@@ -1,7 +1,7 @@
 // src/pages/admin/complaints/ComplaintsDisputesPage.jsx
 import { useState, useMemo, useEffect } from 'react';
-import { Icon } from '../../../components/admin/shared/Icon';
-import { FeatureCard } from '../../../components/admin/shared/FeatureCard';
+import { Icon } from '../shared/Icon';
+import { FeatureCard } from '../shared/FeatureCard';
 import { ICONS } from '../../../constants/admin/icons';
 
 // Loading Spinner Component

@@ -1,6 +1,6 @@
 // src/pages/admin/complaints/IssueCategorization.jsx
 import { useState, useMemo, useEffect } from 'react';
-import { Icon } from '../../../components/admin/shared/Icon';
+import { Icon } from '../shared/Icon';
 import { ICONS } from '../../../constants/admin/icons';
 
 export const IssueCategorization = () => {

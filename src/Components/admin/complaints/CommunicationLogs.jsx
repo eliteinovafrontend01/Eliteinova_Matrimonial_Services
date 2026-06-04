@@ -1,6 +1,6 @@
 // src/pages/admin/complaints/CommunicationLogs.jsx
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { Icon } from '../../../components/admin/shared/Icon';
+import { Icon } from '../shared/Icon';
 import { ICONS } from '../../../constants/admin/icons';
 
 export const CommunicationLogs = () => {

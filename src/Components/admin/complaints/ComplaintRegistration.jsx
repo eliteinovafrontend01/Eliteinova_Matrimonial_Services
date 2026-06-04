@@ -1,6 +1,6 @@
 // src/pages/admin/complaints/ComplaintRegistration.jsx
 import { useState, useRef } from 'react';
-import { Icon } from '../../../components/admin/shared/Icon';
+import { Icon } from '../shared/Icon';
 import { ICONS } from '../../../constants/admin/icons';
 
 export const ComplaintRegistration = () => {
