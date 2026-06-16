@@ -10,16 +10,6 @@ import { VendorOverview } from './vendors/VendorOverview';
 import { ManageServiceProvidersPage } from './vendors/ManageServiceProviders';
 import { ActionsPage } from './vendors/actions/ActionsPage';
 import { VendorVerificationPage } from './vendors/verification/VendorVerificationPage';
-import { 
-  PhotographyPage, 
-  CateringPage, 
-  WeddingHallsPage, 
-  EntertainmentPage, 
-  DecorationsPage, 
-  InvitationsPage, 
-  BridalMakeupPage, 
-  InvestigationsPage 
-} from './vendors/categories/CategoryPages';
 import { ApproveVendorRegistration } from './vendors/actions/ApproveVendorRegistration';
 import { ApproveVerifyProfile } from './vendors/actions/ApproveVerifyProfile';
 import { ManageVendorProfiles } from './vendors/actions/ManageVendorProfiles';
@@ -28,6 +18,18 @@ import { BusinessLicensePage } from './vendors/verification/BusinessLicensePage'
 import { GSTVerificationPage } from './vendors/verification/GSTVerificationPage';
 import { IDProofVerificationPage } from './vendors/verification/IDProofVerificationPage';
 import { VerifiedVendorBadgePage } from './vendors/verification/VerifiedVendorBadgePage';
+
+// Category Pages - Import from individual files via index
+import { 
+  PhotographyPage,
+  CateringPage,
+  WeddingHallsPage,
+  EntertainmentPage,
+  DecorationsPage,
+  InvitationsPage,
+  BridalMakeupPage,
+  InvestigationsPage
+} from './vendors/categories/CategoryPages';
 
 // Booking Management Pages
 import { BookingManagementPage } from './bookings/BookingManagementPage';
@@ -72,13 +74,37 @@ import { AdminActions } from './complaints/AdminActions';
 import { NotificationsUpdates } from './complaints/NotificationsUpdates';
 import { ReportsInsights } from './complaints/ReportsInsights';
 
-// Other Pages
+// Analytics Reports Pages
 import { AnalyticsReportsPage } from './analytics/AnalyticsReportsPage';
+import { DashboardOverviewAnalytics } from './analytics/DashboardOverviewAnalytics';
+import { UserCustomerInsights } from './analytics/UserCustomerInsights';
+import { VendorPerformanceReports } from './analytics/VendorPerformanceReports';
+import { BookingAnalytics } from './analytics/BookingAnalytics';
+import { RevenueFinancialReports } from './analytics/RevenueFinancialReports';
+import { ComplaintSupportReports } from './analytics/ComplaintSupportReports';
+import { ConversionGrowthMetrics } from './analytics/ConversionGrowthMetrics';
+import { CustomReportsGeneration } from './analytics/CustomReportsGeneration';
+import { DataExportOptions } from './analytics/DataExportOptions';
+
+// Admin Roles Pages - Import all role components
 import { AdminRolesPage } from './roles/AdminRolesPage';
+import { RoleCreationManagement } from './roles/RoleCreationManagement';
+import { PermissionBasedAccessControl } from './roles/PermissionBasedAccessControl';
+import { CustomRoleConfiguration } from './roles/CustomRoleConfiguration';
+import { UserAssignment } from './roles/UserAssignment';
+import { AccessRestrictions } from './roles/AccessRestrictions';
+import { ActivityMonitoring } from './roles/ActivityMonitoring';
+import { AuditLogs } from './roles/AuditLogs';
+import { SecureAuthentication } from './roles/SecureAuthentication';
+import { RoleEditingDeactivation } from './roles/RoleEditingDeactivation';
+import { CommonAdminRoles } from './roles/CommonAdminRoles';
+
+// Other Pages
 import { NotificationsPage } from './notifications/NotificationsPage';
 import { SettingsPage } from './settings/SettingsPage';
 import { menuConfig } from '../../constants/admin/menuConfig';
 
+// Category Pages Mapping
 const CATEGORY_PAGES = {
   'Photography': PhotographyPage,
   'Catering': CateringPage,
@@ -98,7 +124,6 @@ const CATEGORY_PAGES = {
   'Assign: ✅ Verified Vendor Badge': VerifiedVendorBadgePage,
 };
 
-// Booking Management Pages Mapping
 const BOOKING_PAGES = {
   'Booking Overview': BookingOverviewPage,
   'Booking Management': BookingManagementPage,
@@ -114,7 +139,6 @@ const BOOKING_PAGES = {
   'Booking Status Management': BookingStatusPage,
 };
 
-// Payment Management Pages Mapping
 const PAYMENT_PAGES = {
   'Payments & Transactions': PaymentsTransactionsPage,
   'Transaction Overview': TransactionOverview,
@@ -131,7 +155,6 @@ const PAYMENT_PAGES = {
   'Reports & Analytics': ReportsAnalytics,
 };
 
-// Complaint & Dispute Management Pages Mapping
 const COMPLAINT_PAGES = {
   'Complaints & Disputes Dashboard': ComplaintsDisputesPage,
   'Complaint Registration': ComplaintRegistration,
@@ -147,10 +170,37 @@ const COMPLAINT_PAGES = {
   'Reports & Insights': ReportsInsights,
 };
 
+// Analytics Pages - Direct mapping of submenu names to components
+const ANALYTICS_SUBMENU_PAGES = {
+  'Dashboard Analytics Overview': DashboardOverviewAnalytics,
+  'User & Customer Insights': UserCustomerInsights,
+  'Vendor Performance Reports': VendorPerformanceReports,
+  'Booking Analytics': BookingAnalytics,
+  'Revenue & Financial Reports': RevenueFinancialReports,
+  'Complaint & Support Reports': ComplaintSupportReports,
+  'Conversion & Growth Metrics': ConversionGrowthMetrics,
+  'Custom Reports Generation': CustomReportsGeneration,
+  'Data Export Options': DataExportOptions,
+  'Visual Charts & Graphs': DashboardOverviewAnalytics,
+};
+
+// Admin Roles Pages - Mapping for submenu to component
+const ROLES_SUBMENU_PAGES = {
+  'Role Creation & Management': RoleCreationManagement,
+  'Permission-Based Access Control': PermissionBasedAccessControl,
+  'Custom Role Configuration': CustomRoleConfiguration,
+  'User Assignment': UserAssignment,
+  'Access Restrictions': AccessRestrictions,
+  'Activity Monitoring': ActivityMonitoring,
+  'Audit Logs': AuditLogs,
+  'Secure Authentication': SecureAuthentication,
+  'Role Editing & Deactivation': RoleEditingDeactivation,
+  'Common Admin Roles': CommonAdminRoles,
+};
+
 export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavigate, selectedBooking, setSelectedBooking }) => {
   const menu = menuConfig.find(m => m.id === activeMenu);
 
-  // Handle booking detail view
   const handleViewBooking = (booking) => {
     if (setSelectedBooking) {
       setSelectedBooking(booking);
@@ -189,56 +239,62 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
   
   // Bookings Section
   if (activeMenu === 'bookings') {
-    // Handle Detailed Booking View with selected booking
     if (activeSubmenu === 'Detailed Booking View' && selectedBooking) {
       return (
         <BookingDetailsPage 
           booking={selectedBooking} 
           onBack={handleBackFromBookingDetail}
-          onUpdateStatus={(id, status) => {
-            console.log(`Update booking ${id} status to ${status}`);
-          }}
-          onUpdatePayment={(id, payment) => {
-            console.log(`Update booking ${id} payment to ${payment}`);
-          }}
+          onUpdateStatus={(id, status) => console.log(`Update booking ${id} status to ${status}`)}
+          onUpdatePayment={(id, payment) => console.log(`Update booking ${id} payment to ${payment}`)}
         />
       );
     }
-    
-    // Check if we have a specific booking page component
     const BookingPage = BOOKING_PAGES[activeSubmenu];
-    if (BookingPage) {
-      return <BookingPage onViewBooking={handleViewBooking} />;
-    }
-    
-    // Default to Booking Overview
+    if (BookingPage) return <BookingPage onViewBooking={handleViewBooking} />;
     return <BookingManagementPage onSelectBooking={handleViewBooking} />;
   }
   
-  // Payments Section - Updated with all payment pages including main page and subpages
+  // Payments Section
   if (activeMenu === 'payments') {
-    // Check if we have a specific payment page component
     const PaymentPage = PAYMENT_PAGES[activeSubmenu];
-    if (PaymentPage) {
-      return <PaymentPage />;
-    }
-    // Default to Payments & Transactions main page
+    if (PaymentPage) return <PaymentPage />;
     return <PaymentsTransactionsPage />;
   }
   
   // Complaints & Disputes Section
   if (activeMenu === 'complaints') {
-    // Check if we have a specific complaint page component
     const ComplaintPage = COMPLAINT_PAGES[activeSubmenu];
-    if (ComplaintPage) {
-      return <ComplaintPage />;
-    }
-    // Default to Complaints & Disputes Dashboard
+    if (ComplaintPage) return <ComplaintPage />;
     return <ComplaintsDisputesPage />;
   }
   
-  if (activeMenu === 'analytics') return <AnalyticsReportsPage />;
-  if (activeMenu === 'roles') return <AdminRolesPage />;
+  // Analytics Section
+  if (activeMenu === 'analytics') {
+    console.log('Analytics - Active Submenu:', activeSubmenu);
+    
+    // If there's a submenu, show the specific component
+    if (activeSubmenu && ANALYTICS_SUBMENU_PAGES[activeSubmenu]) {
+      const AnalyticsComponent = ANALYTICS_SUBMENU_PAGES[activeSubmenu];
+      console.log('Showing specific analytics component:', activeSubmenu);
+      return <AnalyticsComponent />;
+    }
+    
+    // If no submenu or submenu not found, show the main AnalyticsReportsPage
+    console.log('Showing main AnalyticsReportsPage');
+    return <AnalyticsReportsPage />;
+  }
+  
+  // Admin Roles Section - Updated to handle submenus
+  if (activeMenu === 'roles') {
+    // If there's a specific submenu, render that component
+    if (activeSubmenu && ROLES_SUBMENU_PAGES[activeSubmenu]) {
+      const RoleComponent = ROLES_SUBMENU_PAGES[activeSubmenu];
+      return <RoleComponent />;
+    }
+    // Otherwise render the main AdminRolesPage with all submenus
+    return <AdminRolesPage activeSubmenu={activeSubmenu} />;
+  }
+  
   if (activeMenu === 'notifications') return <NotificationsPage />;
   if (activeMenu === 'settings') return <SettingsPage />;
   

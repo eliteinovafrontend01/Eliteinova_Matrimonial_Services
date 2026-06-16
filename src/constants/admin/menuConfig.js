@@ -126,7 +126,6 @@ export const menuConfig = [
       'Conversion & Growth Metrics',
       'Custom Reports Generation',
       'Data Export Options',
-      'Visual Charts & Graphs'
     ], 
     vendorStyle: false 
   },
