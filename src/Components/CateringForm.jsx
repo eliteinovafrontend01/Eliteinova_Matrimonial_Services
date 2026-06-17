@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from "react";
 import { ArrowLeft, Utensils, Banknote, X, Pen, Trash2, Upload, Image as ImageIcon, Link as LinkIcon, DollarSign } from "lucide-react";
 

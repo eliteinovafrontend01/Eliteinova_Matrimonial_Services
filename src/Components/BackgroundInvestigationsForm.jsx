@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from "react";
 import { ArrowLeft, Search, FileText, Shield, Building, User, MapPin, Phone, Mail, Globe, Banknote, X, Pen, Trash2, Upload, Check, DollarSign } from "lucide-react";
 

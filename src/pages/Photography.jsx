@@ -451,7 +451,7 @@ const Photography = () => {
       )
     },
     {
-      title: "Delivery Timeline", // Kept as is - matches form
+      title: "Delivery Timeline", 
       content: (
         <div className="space-y-3">
           <div>
@@ -491,7 +491,7 @@ const Photography = () => {
     }
   ];
 
-  // Mobile filter pages - ONLY HEADINGS CHANGED to match registration form
+  // Mobile filter pages 
   const mobileFilterPages = [
     {
       title: "Basic Filters", 
