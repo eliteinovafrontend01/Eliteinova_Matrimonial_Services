@@ -144,23 +144,24 @@ export default function VendorRegistrationModal({ isOpen, onClose }) {
 
   // Handle work photos upload (simulated)
   const handlePhotoUpload = (e) => {
-    const files = e.target.files;
-    if (files.length + formData.workPhotos.length > 3) {
-      alert("Maximum 3 photos allowed");
-      return;
-    }
-    
-    const newPhotos = Array.from(files).map(file => ({
-      name: file.name,
-      url: URL.createObjectURL(file), // Temporary URL for preview
-      size: file.size
-    }));
-    
-    setFormData(prev => ({
-      ...prev,
-      workPhotos: [...prev.workPhotos, ...newPhotos].slice(0, 3) // Limit to 3
-    }));
-  };
+  const files = e.target.files;
+  if (files.length + formData.workPhotos.length > 3) {
+    alert("Maximum 3 photos allowed");
+    return;
+  }
+
+  const newPhotos = Array.from(files).map(file => ({
+    name: file.name,
+    url: URL.createObjectURL(file), // only for preview
+    file: file,                     // actual File object for FormData
+    size: file.size
+  }));
+
+  setFormData(prev => ({
+    ...prev,
+    workPhotos: [...prev.workPhotos, ...newPhotos].slice(0, 3)
+  }));
+};
 
   // Remove a photo
   const removePhoto = (index) => {
@@ -371,16 +372,68 @@ export default function VendorRegistrationModal({ isOpen, onClose }) {
                       ))}
                     </div>
                     
-                    <div className="flex items-center gap-2 mt-3">
-                      <label className="text-xs sm:text-sm font-semibold whitespace-nowrap">Other:</label>
-                      <input 
-                        name="otherService"
-                        value={formData.otherService}
-                        onChange={handleInputChange}
-                        className="input-field flex-1" 
-                        placeholder="Specify other service" 
-                      />
-                    </div>
+                    <div className="mt-3">
+  <label className="text-xs sm:text-sm font-semibold text-red-800 block mb-1">Other Services:</label>
+  <div className="flex items-center gap-2">
+    <input 
+      name="otherService"
+      value={formData.otherService}
+      onChange={handleInputChange}
+      className="input-field flex-1" 
+      placeholder="e.g. Event Photography, Maternity Shoot..." 
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' && formData.otherService.trim()) {
+          setFormData(prev => ({
+            ...prev,
+            selectedServices: [...prev.selectedServices, prev.otherService.trim()],
+            otherService: ""
+          }));
+        }
+      }}
+    />
+    <button
+      type="button"
+      onClick={() => {
+        if (formData.otherService.trim()) {
+          setFormData(prev => ({
+            ...prev,
+            selectedServices: [...prev.selectedServices, prev.otherService.trim()],
+            otherService: ""
+          }));
+        }
+      }}
+      className="shrink-0 px-3 py-1.5 bg-red-700 hover:bg-red-800 text-yellow-100 text-xs font-bold rounded-lg transition-colors shadow-sm border border-red-900"
+    >
+      Add
+    </button>
+  </div>
+
+  {/* Added custom services appear here as tags */}
+  {formData.selectedServices.filter(s => !["Wedding Photography","Candid Photography","Videography","Cinematic Wedding Film","Pre-Wedding Shoot","Drone Coverage"].includes(s)).length > 0 && (
+    <div className="flex flex-wrap gap-1.5 mt-2">
+      {formData.selectedServices
+        .filter(s => !["Wedding Photography","Candid Photography","Videography","Cinematic Wedding Film","Pre-Wedding Shoot","Drone Coverage"].includes(s))
+        .map((service, index) => (
+          <span 
+            key={index} 
+            className="flex items-center gap-1 bg-red-100 border border-red-300 text-red-800 text-xs font-medium px-2 py-0.5 rounded-full"
+          >
+            {service}
+            <button
+              type="button"
+              onClick={() => setFormData(prev => ({
+                ...prev,
+                selectedServices: prev.selectedServices.filter(s => s !== service)
+              }))}
+              className="text-red-500 hover:text-red-700 font-bold leading-none"
+            >
+              ×
+            </button>
+          </span>
+        ))}
+    </div>
+  )}
+</div>
                   </div>
                 </div>
 
@@ -1177,15 +1230,15 @@ export default function VendorRegistrationModal({ isOpen, onClose }) {
         }
         
         .input-field {
-          width: 100%;
-          padding: 0.5rem 0.75rem;
-          border: 1.5px solid #DC2626;
-          border-radius: 0.5rem;
-          font-size: 0.6875rem;
-          background: white;
-          transition: all 0.3s ease;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
+        width: 100%;
+        padding: 0.3rem 0.5rem;
+        border: 1.5px solid #DC2626;
+        border-radius: 0.5rem;
+        font-size: 0.6875rem;
+        background: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
         
         .input-field:focus {
           outline: none;
@@ -1280,8 +1333,8 @@ export default function VendorRegistrationModal({ isOpen, onClose }) {
           }
           
           .input-field {
-            padding: 0.875rem 1.125rem;
-            font-size: 0.875rem;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.8rem;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
             border-radius: 0.875rem;
           }

@@ -4,10 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Form steps
 const steps = [
-  "Personal Details",
   "Contact Info",
-  "Family Details",
-  "Education & Career",
   "Bride/Groom Details",
   "Event Details",
   "Services",
@@ -49,20 +46,9 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
   const canvasRef = React.useRef(null);
   
   const [formData, setFormData] = useState({
-    // Step 1: Personal Details
-    fullName: '',
-    dateOfBirth: '',
-    gender: '',
-    maritalStatus: '',
-    religion: '',
-    caste: '',
-    motherTongue: '',
-    height: '',
-    weight: '',
-    bodyType: '',
-    complexion: '',
     
     // Step 2: Contact Information
+    fullName:'',
     mobile: '',
     alternateMobile: '',
     email: '',
@@ -70,24 +56,6 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
     cityDistrict: '',
     state: '',
     pinCode: '',
-    
-    // Step 3: Family Details
-    fatherName: '',
-    fatherOccupation: '',
-    motherName: '',
-    motherOccupation: '',
-    siblings: '',
-    familyType: '',
-    familyStatus: '',
-    familyValues: '',
-    
-    // Step 4: Education & Career
-    highestEducation: '',
-    college: '',
-    occupation: '',
-    company: '',
-    annualIncome: '',
-    workLocation: '',
     
     // Step 5: Bride/Groom Details
     brideGroomName: '',
@@ -131,7 +99,7 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
 
   // Initialize canvas for signature
   React.useEffect(() => {
-    if (step === 8 && canvasRef.current) {
+    if (step === 5 && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
       
@@ -320,183 +288,26 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
         {/* SCROLLABLE CONTENT AREA */}
         <div className="flex-1 overflow-y-auto p-4">
           <div className="max-w-full mx-auto">
-            
-            {/* STEP 1: Personal Details */}
+
+            {/* STEP 1: Contact Information */}
             {step === 0 && (
-              <div className="space-y-4">
-                <h3 className="text-red-800 font-bold text-center text-xs sm:text-sm mb-3">
-                  <User className="inline w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-                  Personal Details
-                </h3>
-                
-                <div className="form-group">
-                  <label className="form-label">Full Name *</label>
-                  <input 
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    className="input-field" 
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </div>
-                
-                <div className="form-group">
-                  <label className="form-label">Date of Birth *</label>
-                  <input 
-                    name="dateOfBirth"
-                    value={formData.dateOfBirth}
-                    onChange={handleInputChange}
-                    className="input-field" 
-                    type="date"
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="form-group">
-                    <label className="form-label">Gender *</label>
-                    <select 
-                      name="gender"
-                      value={formData.gender}
-                      onChange={handleInputChange}
-                      className="input-field"
-                      required
-                    >
-                      <option value="">Select</option>
-                      {genderOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Marital Status *</label>
-                    <select 
-                      name="maritalStatus"
-                      value={formData.maritalStatus}
-                      onChange={handleInputChange}
-                      className="input-field"
-                      required
-                    >
-                      <option value="">Select</option>
-                      {maritalStatusOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="form-group">
-                    <label className="form-label">Religion *</label>
-                    <select 
-                      name="religion"
-                      value={formData.religion}
-                      onChange={handleInputChange}
-                      className="input-field"
-                      required
-                    >
-                      <option value="">Select</option>
-                      {religionOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Caste/Subcaste</label>
-                    <input 
-                      name="caste"
-                      value={formData.caste}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="Enter caste"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="form-group">
-                    <label className="form-label">Mother Tongue</label>
-                    <select 
-                      name="motherTongue"
-                      value={formData.motherTongue}
-                      onChange={handleInputChange}
-                      className="input-field"
-                    >
-                      <option value="">Select</option>
-                      {motherTongueOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Body Type</label>
-                    <select 
-                      name="bodyType"
-                      value={formData.bodyType}
-                      onChange={handleInputChange}
-                      className="input-field"
-                    >
-                      <option value="">Select</option>
-                      {bodyTypeOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="form-group">
-                    <label className="form-label">Height</label>
-                    <input 
-                      name="height"
-                      value={formData.height}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="e.g., 5ft 5in"
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Weight (kg)</label>
-                    <input 
-                      name="weight"
-                      value={formData.weight}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      type="number"
-                      placeholder="Enter weight"
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Complexion</label>
-                    <select 
-                      name="complexion"
-                      value={formData.complexion}
-                      onChange={handleInputChange}
-                      className="input-field"
-                    >
-                      <option value="">Select</option>
-                      {complexionOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 2: Contact Information */}
-            {step === 1 && (
               <div className="space-y-4">
                 <h3 className="text-red-800 font-bold text-center text-xs sm:text-sm mb-3">
                   <Phone className="inline w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                   Contact Information
                 </h3>
+
+                <div className="form-group">
+                <label className="form-label">Full Name *</label>
+                <input 
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleInputChange}
+                  className="input-field" 
+                  placeholder="Enter your full name"
+                  required
+                />
+              </div>
                 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="form-group">
@@ -595,208 +406,8 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
               </div>
             )}
 
-            {/* STEP 3: Family Details */}
-            {step === 2 && (
-              <div className="space-y-4">
-                <h3 className="text-red-800 font-bold text-center text-xs sm:text-sm mb-3">
-                  <Users className="inline w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-                  Family Details
-                </h3>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="form-group">
-                    <label className="form-label">Father's Name</label>
-                    <input 
-                      name="fatherName"
-                      value={formData.fatherName}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="Enter father's name"
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Father's Occupation</label>
-                    <input 
-                      name="fatherOccupation"
-                      value={formData.fatherOccupation}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="Enter occupation"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="form-group">
-                    <label className="form-label">Mother's Name</label>
-                    <input 
-                      name="motherName"
-                      value={formData.motherName}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="Enter mother's name"
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Mother's Occupation</label>
-                    <input 
-                      name="motherOccupation"
-                      value={formData.motherOccupation}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="Enter occupation"
-                    />
-                  </div>
-                </div>
-                
-                <div className="form-group">
-                  <label className="form-label">Number of Siblings</label>
-                  <input 
-                    name="siblings"
-                    value={formData.siblings}
-                    onChange={handleInputChange}
-                    className="input-field" 
-                    placeholder="e.g., 1 brother, 1 sister"
-                  />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="form-group">
-                    <label className="form-label">Family Type</label>
-                    <select 
-                      name="familyType"
-                      value={formData.familyType}
-                      onChange={handleInputChange}
-                      className="input-field"
-                    >
-                      <option value="">Select</option>
-                      {familyTypeOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Family Status</label>
-                    <select 
-                      name="familyStatus"
-                      value={formData.familyStatus}
-                      onChange={handleInputChange}
-                      className="input-field"
-                    >
-                      <option value="">Select</option>
-                      {familyStatusOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                
-                <div className="form-group">
-                  <label className="form-label">Family Values</label>
-                  <select 
-                    name="familyValues"
-                    value={formData.familyValues}
-                    onChange={handleInputChange}
-                    className="input-field"
-                  >
-                    <option value="">Select</option>
-                    {familyValuesOptions.map(opt => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 4: Education & Career */}
-            {step === 3 && (
-              <div className="space-y-4">
-                <h3 className="text-red-800 font-bold text-center text-xs sm:text-sm mb-3">
-                  <Briefcase className="inline w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-                  Education & Career
-                </h3>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="form-group">
-                    <label className="form-label">Highest Education *</label>
-                    <input 
-                      name="highestEducation"
-                      value={formData.highestEducation}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="e.g., B.Tech, MBA"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">College/University</label>
-                    <input 
-                      name="college"
-                      value={formData.college}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="Enter college name"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="form-group">
-                    <label className="form-label">Occupation *</label>
-                    <input 
-                      name="occupation"
-                      value={formData.occupation}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="e.g., Software Engineer"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Company/Organization</label>
-                    <input 
-                      name="company"
-                      value={formData.company}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="Enter company name"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="form-group">
-                    <label className="form-label">Annual Income</label>
-                    <input 
-                      name="annualIncome"
-                      value={formData.annualIncome}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="e.g., ₹5,00,000"
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label">Work Location</label>
-                    <input 
-                      name="workLocation"
-                      value={formData.workLocation}
-                      onChange={handleInputChange}
-                      className="input-field" 
-                      placeholder="e.g., Chennai"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 5: Bride/Groom Details */}
-            {step === 4 && (
+            {/* STEP 2: Bride/Groom Details */}
+            {step === 1 && (
               <div className="space-y-4">
                 <h3 className="text-red-800 font-bold text-center text-xs sm:text-sm mb-3">
                   <Heart className="inline w-3 h-3 sm:w-4 sm:h-4 mr-2" />
@@ -883,8 +494,8 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
               </div>
             )}
 
-            {/* STEP 6: Marriage Event Details */}
-            {step === 5 && (
+            {/* STEP 3: Marriage Event Details */}
+            {step === 2 && (
               <div className="space-y-4">
                 <h3 className="text-red-800 font-bold text-center text-xs sm:text-sm mb-3">
                   <Calendar className="inline w-3 h-3 sm:w-4 sm:h-4 mr-2" />
@@ -945,8 +556,8 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
               </div>
             )}
 
-            {/* STEP 7: Wedding Event Services */}
-            {step === 6 && (
+            {/* STEP 4: Wedding Event Services */}
+            {step === 3 && (
               <div className="space-y-4">
                 <h3 className="text-red-800 font-bold text-center text-xs sm:text-sm mb-3">
                   Wedding Event Services
@@ -969,8 +580,8 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
               </div>
             )}
 
-            {/* STEP 8: Package & Budget Selection */}
-            {step === 7 && (
+            {/* STEP 5: Package & Budget Selection */}
+            {step === 4 && (
               <div className="space-y-4">
                 <h3 className="text-red-800 font-bold text-center text-xs sm:text-sm mb-3">
                   <Package className="inline w-3 h-3 sm:w-4 sm:h-4 mr-2" />
@@ -1025,8 +636,8 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
               </div>
             )}
 
-            {/* STEP 9: Declaration */}
-            {step === 8 && (
+            {/* STEP 6: Declaration */}
+            {step === 5 && (
               <div className="space-y-4">
                 <h3 className="text-red-800 font-bold text-center text-xs sm:text-sm mb-3">
                   <FileText className="inline w-3 h-3 sm:w-4 sm:h-4 mr-2" />
@@ -1162,8 +773,8 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
           
           <button
             className="btn-primary-red ml-auto text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2"
-            onClick={() => (step === 8 ? handleSubmit() : setStep(step + 1))}
-            disabled={step === 8 && (!formData.declaration || !hasSignature)}
+            onClick={() => (step === 5 ? handleSubmit() : setStep(step + 1))}
+            disabled={step === 5 && (!formData.declaration || !hasSignature)}
           >
             {step === 8 ? "Complete Registration" : "Continue"}
           </button>
@@ -1192,13 +803,13 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
         
         .input-field {
           width: 100%;
-          padding: 0.5rem 0.75rem;
+          padding: 0.3rem 0.5rem;
           border: 1.5px solid #DC2626;
-          border-radius: 0.5rem;
-          font-size: 0.6875rem;
+          border-radius: 0.4rem;
+          font-size: 0.625rem;
           background: white;
           transition: all 0.3s ease;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
         }
         
         .input-field:focus {
@@ -1283,8 +894,8 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
 
         @media (min-width: 640px) {
           .form-group {
-            gap: 0.625rem;
-            margin-bottom: 1.25rem;
+            gap: 0.3rem;
+            margin-bottom: 0.6rem;
           }
           
           .form-label {
@@ -1292,10 +903,10 @@ export default function CustomerRegistrationForm({ isOpen, onClose }) {
           }
           
           .input-field {
-            padding: 0.875rem 1.125rem;
-            font-size: 0.875rem;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 0.875rem;
+            padding: 0.45rem 0.7rem;
+            font-size: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border-radius: 0.5rem;
           }
           
           .input-field:focus {
