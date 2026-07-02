@@ -1,19 +1,31 @@
-import { useState } from 'react';
-import { Icon } from '../shared/Icon';
+// src/components/admin/settings/SettingsPage.jsx
+import React, { useState } from 'react';
 import { FeatureCard } from '../shared/FeatureCard';
-import { ICONS } from '../../../constants/admin/icons';
+import { settingsSubmenusConfig } from '../../../constants/admin/menuConfig';
 
-export const SettingsPage = () => {
+export const SettingsPage = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState('general');
-  
-  const tabs = [
-    { id: 'general', label: 'General Settings', icon: '⚙️' },
-    { id: 'users', label: 'User Settings', icon: '👥' },
-    { id: 'vendors', label: 'Vendor Settings', icon: '🏢' },
-    { id: 'payments', label: 'Payment Settings', icon: '💰' },
-    { id: 'notifications', label: 'Notification Settings', icon: '🔔' },
-    { id: 'security', label: 'Security Settings', icon: '🔒' },
-  ];
+
+  const handleCategoryClick = (tabId) => {
+    // Map tab IDs to menu submenu labels
+    const tabToSubmenuMap = {
+      'general': 'General Settings',
+      'users': 'User Settings',
+      'vendors': 'Vendor Settings',
+      'payments': 'Payment Settings',
+      'notifications': 'Notification Settings',
+      'kyc': 'KYC & Verification Settings',
+      'booking': 'Booking Settings',
+      'security': 'Security Settings',
+      'content': 'Content Management Settings',
+      'commission': 'Commission & Pricing Settings'
+    };
+
+    // Navigate to the settings subpage
+    if (onNavigate) {
+      onNavigate('settings', tabToSubmenuMap[tabId]);
+    }
+  };
 
   const featureCards = [
     { emoji: '⚙️', title: 'Platform Configuration', accentColor: 'bg-gray-100', points: ['App name, logo & branding', 'Company details & contact', 'Time zone & language settings', 'Regional preferences'] },
@@ -21,6 +33,26 @@ export const SettingsPage = () => {
     { emoji: '🔒', title: 'Security Settings', accentColor: 'bg-red-50', points: ['Password policies', '2FA enforcement', 'Login attempt limits', 'Session management'] },
     { emoji: '💰', title: 'Pricing & Commission', accentColor: 'bg-amber-50', points: ['Vendor commission settings', 'Subscription plans', 'Service fees', 'Tax (GST) configuration'] }
   ];
+
+  // Get the selected tab's features if any
+  const getTabFeatures = (tabId) => {
+    const featuresMap = {
+      'general': ['App name & logo management', 'Company information', 'Contact details', 'Time zone & language'],
+      'users': ['Registration settings', 'OTP verification', 'Profile visibility', 'Login preferences'],
+      'vendors': ['Approval workflow', 'Document requirements', 'Commission settings', 'Verification rules'],
+      'payments': ['Gateway integration', 'Currency & tax', 'Refund policies', 'Payout management'],
+      'notifications': ['SMS gateway', 'Email server', 'Push notifications', 'Alert preferences'],
+      'kyc': ['ID verification', 'Document validation', 'Auto-verification', 'Fraud detection'],
+      'booking': ['Booking flow', 'Cancellation rules', 'Time slots', 'Availability settings'],
+      'security': ['Password policies', '2FA enforcement', 'Access control', 'Security logs'],
+      'content': ['Privacy Policy', 'Terms & Conditions', 'About Us', 'FAQs'],
+      'commission': ['Commission rates', 'Service fees', 'Subscription plans', 'Revenue tracking']
+    };
+    return featuresMap[tabId] || ['Configure settings', 'Manage preferences', 'Update rules', 'Save changes'];
+  };
+
+  // Get the selected tab data
+  const selectedTab = settingsSubmenusConfig.find(tab => tab.id === activeTab);
 
   return (
     <div>
@@ -34,108 +66,108 @@ export const SettingsPage = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="border-b border-gray-100 overflow-x-auto">
-          <div className="flex gap-1 p-2 min-w-max">
-            {tabs.map(tab => (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap flex items-center gap-2 ${activeTab === tab.id ? 'bg-red-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-100'}`}>
-                <span>{tab.icon}</span> {tab.label}
-              </button>
+      {/* Quick Navigation Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        {settingsSubmenusConfig.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => handleCategoryClick(tab.id)}
+            className={`p-6 rounded-2xl border-2 text-left transition-all hover:shadow-lg group ${
+              activeTab === tab.id 
+                ? 'border-red-500 bg-red-50 shadow-md' 
+                : 'border-gray-200 bg-white hover:border-red-300 hover:bg-red-50/30'
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <div className={`text-3xl transition-transform group-hover:scale-110 ${activeTab === tab.id ? 'animate-bounce' : ''}`}>
+                {tab.icon}
+              </div>
+              <div className="flex-1">
+                <h4 className={`font-bold text-sm ${activeTab === tab.id ? 'text-red-700' : 'text-gray-800'} group-hover:text-red-600`}>
+                  {tab.label}
+                </h4>
+                <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                  {tab.description}
+                </p>
+                {activeTab === tab.id && (
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="text-xs text-red-600 font-semibold">Active</span>
+                    <div className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></div>
+                  </div>
+                )}
+              </div>
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-gray-400">→</span>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {/* Selected Tab Detail View */}
+      {selectedTab && (
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <span>{selectedTab.icon}</span>
+                {selectedTab.label}
+              </h3>
+              <p className="text-sm text-gray-500 mt-1">{selectedTab.description}</p>
+            </div>
+            <button
+              onClick={() => handleCategoryClick(selectedTab.id)}
+              className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+            >
+              Configure Now
+              <span>→</span>
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+            {getTabFeatures(selectedTab.id).map((feature, idx) => (
+              <div key={idx} className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <span className="text-green-500">✓</span>
+                <span className="text-sm text-gray-600">{feature}</span>
+              </div>
             ))}
           </div>
         </div>
+      )}
 
-        <div className="p-6">
-          {activeTab === 'general' && (
-            <div className="space-y-6">
-              <div>
-                <h4 className="font-bold text-gray-800 text-sm mb-4">Platform Details</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div><label className="block text-xs font-semibold text-gray-600 mb-1">App Name</label><input type="text" defaultValue="Wedding Services Platform" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></div>
-                  <div><label className="block text-xs font-semibold text-gray-600 mb-1">Company Name</label><input type="text" defaultValue="Wedding Services Pvt Ltd" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></div>
-                  <div><label className="block text-xs font-semibold text-gray-600 mb-1">Contact Email</label><input type="email" defaultValue="support@weddingservices.com" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></div>
-                  <div><label className="block text-xs font-semibold text-gray-600 mb-1">Contact Phone</label><input type="text" defaultValue="+91 98765 43210" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></div>
-                </div>
-              </div>
-              <button className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700">Save Changes</button>
+      {/* Feature Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        {featureCards.map((c, i) => (
+          <div 
+            key={i} 
+            className={`p-5 rounded-2xl ${c.accentColor} border border-gray-200 hover:shadow-md transition-shadow cursor-pointer`}
+            onClick={() => {
+              // Map feature card to settings tab
+              const cardToTabMap = {
+                'Platform Configuration': 'general',
+                'API Integrations': 'payments',
+                'Security Settings': 'security',
+                'Pricing & Commission': 'commission'
+              };
+              const tabId = cardToTabMap[c.title];
+              if (tabId) handleCategoryClick(tabId);
+            }}
+          >
+            <div className="text-3xl mb-2">{c.emoji}</div>
+            <h4 className="font-semibold text-gray-800 text-sm mb-2">{c.title}</h4>
+            <ul className="space-y-1">
+              {c.points.map((point, idx) => (
+                <li key={idx} className="text-xs text-gray-600 flex items-start gap-1">
+                  <span className="text-red-500 mt-0.5">•</span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 text-xs text-red-600 font-semibold flex items-center gap-1">
+              Configure <span>→</span>
             </div>
-          )}
-
-          {activeTab === 'users' && (
-            <div className="space-y-6">
-              <div><h4 className="font-bold text-gray-800 text-sm mb-4">Registration & Login Settings</h4>
-                <div className="space-y-3">
-                  <label className="flex items-center gap-3"><input type="checkbox" defaultChecked className="rounded border-gray-300" /><span className="text-sm text-gray-600">Allow new user registration</span></label>
-                  <label className="flex items-center gap-3"><input type="checkbox" defaultChecked className="rounded border-gray-300" /><span className="text-sm text-gray-600">Enable OTP verification via SMS (Twilio)</span></label>
-                </div>
-              </div>
-              <button className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700">Save Changes</button>
-            </div>
-          )}
-
-          {activeTab === 'vendors' && (
-            <div className="space-y-6">
-              <div><h4 className="font-bold text-gray-800 text-sm mb-4">Vendor Registration</h4>
-                <div className="space-y-3">
-                  <label className="flex items-center gap-3"><input type="radio" name="approval" defaultChecked className="text-red-600" /><span className="text-sm text-gray-600">Manual approval required</span></label>
-                  <label className="flex items-center gap-3"><input type="radio" name="approval" className="text-red-600" /><span className="text-sm text-gray-600">Auto-approve new vendors</span></label>
-                </div>
-              </div>
-              <div><h4 className="font-bold text-gray-800 text-sm mb-4">Required Documents</h4>
-                <div className="space-y-2">
-                  {['Business Registration Certificate', 'Government ID Proof', 'Address Proof', 'GST Certificate'].map(doc => (
-                    <label key={doc} className="flex items-center gap-3"><input type="checkbox" defaultChecked className="rounded border-gray-300" /><span className="text-sm text-gray-600">{doc}</span></label>
-                  ))}
-                </div>
-              </div>
-              <button className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700">Save Changes</button>
-            </div>
-          )}
-
-          {activeTab === 'payments' && (
-            <div className="space-y-6">
-              <div><h4 className="font-bold text-gray-800 text-sm mb-4">Payment Gateways</h4>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><div className="flex items-center gap-2"><span className="text-lg">💰</span><span className="text-sm font-semibold">Razorpay</span></div><span className="text-xs text-green-600">Connected</span><button className="text-xs text-red-600">Configure</button></div>
-                </div>
-              </div>
-              <div><h4 className="font-bold text-gray-800 text-sm mb-4">Currency & Tax</h4>
-                <div className="grid grid-cols-2 gap-4"><div><label className="block text-xs font-semibold text-gray-600 mb-1">Currency</label><select className="w-full px-3 py-2 border rounded-lg text-sm"><option>INR (₹)</option></select></div><div><label className="block text-xs font-semibold text-gray-600 mb-1">GST Rate (%)</label><input type="number" defaultValue="18" className="w-full px-3 py-2 border rounded-lg text-sm" /></div></div>
-              </div>
-              <button className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700">Save Changes</button>
-            </div>
-          )}
-
-          {activeTab === 'notifications' && (
-            <div className="space-y-6">
-              <div><h4 className="font-bold text-gray-800 text-sm mb-4">Email Server</h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <div><label className="block text-xs font-semibold text-gray-600 mb-1">SMTP Host</label><input type="text" placeholder="smtp.gmail.com" className="w-full px-3 py-2 border rounded-lg text-sm" /></div>
-                  <div><label className="block text-xs font-semibold text-gray-600 mb-1">SMTP Port</label><input type="text" placeholder="587" className="w-full px-3 py-2 border rounded-lg text-sm" /></div>
-                </div>
-              </div>
-              <button className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700">Save & Test</button>
-            </div>
-          )}
-
-          {activeTab === 'security' && (
-            <div className="space-y-6">
-              <div><h4 className="font-bold text-gray-800 text-sm mb-4">Password Policies</h4>
-                <div className="space-y-3">
-                  <label className="flex items-center gap-3"><input type="checkbox" defaultChecked /><span className="text-sm text-gray-600">Require strong password (min 8 chars, mix of letters/numbers/symbols)</span></label>
-                  <label className="flex items-center gap-3"><input type="checkbox" defaultChecked /><span className="text-sm text-gray-600">Password expiry (90 days)</span></label>
-                  <label className="flex items-center gap-3"><input type="checkbox" /><span className="text-sm text-gray-600">Enforce 2FA for admin accounts</span></label>
-                </div>
-              </div>
-              <button className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700">Save Changes</button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-6">
-        {featureCards.map((c, i) => <FeatureCard key={i} {...c} />)}
+          </div>
+        ))}
       </div>
     </div>
   );

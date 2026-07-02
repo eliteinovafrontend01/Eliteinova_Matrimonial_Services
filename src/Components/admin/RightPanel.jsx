@@ -112,8 +112,19 @@ import { DeliveryTracking } from './notifications/DeliveryTracking';
 import { UserPreferencesControl } from './notifications/UserPreferencesControl';
 import { HistoryLogs } from './notifications/HistoryLogs';
 
-// Other Pages
+// Settings Pages
 import { SettingsPage } from './settings/SettingsPage';
+import { GeneralSettings } from './settings/GeneralSettings';
+import { UserSettings } from './settings/UserSettings';
+import { VendorSettings } from './settings/VendorSettings';
+import { PaymentSettings } from './settings/PaymentSettings';
+import { NotificationSettings } from './settings/NotificationSettings';
+import { KYCVerificationSettings } from './settings/KYCVerificationSettings';
+import { BookingSettings } from './settings/BookingSettings';
+import { SecuritySettings } from './settings/SecuritySettings';
+import { ContentManagementSettings } from './settings/ContentManagementSettings';
+import { CommissionPricingSettings } from './settings/CommissionPricingSettings';
+
 import { menuConfig } from '../../constants/admin/menuConfig';
 
 // Category Pages Mapping
@@ -208,7 +219,6 @@ const ROLES_SUBMENU_PAGES = {
   'Common Admin Roles': CommonAdminRoles,
 };
 
-// Notification Pages Mapping
 const NOTIFICATION_SUBMENU_PAGES = {
   'Multi-Channel Notifications': MultiChannelNotifications,
   'Event-Based Notifications': EventBasedNotifications,
@@ -220,6 +230,20 @@ const NOTIFICATION_SUBMENU_PAGES = {
   'Delivery Tracking': DeliveryTracking,
   'User Preferences Control': UserPreferencesControl,
   'History & Logs': HistoryLogs,
+};
+
+// Settings Pages Mapping
+const SETTINGS_PAGES = {
+  'General Settings': GeneralSettings,
+  'User Settings': UserSettings,
+  'Vendor Settings': VendorSettings,
+  'Payment Settings': PaymentSettings,
+  'Notification Settings': NotificationSettings,
+  'KYC & Verification Settings': KYCVerificationSettings,
+  'Booking Settings': BookingSettings,
+  'Security Settings': SecuritySettings,
+  'Content Management Settings': ContentManagementSettings,
+  'Commission & Pricing Settings': CommissionPricingSettings,
 };
 
 export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavigate, selectedBooking, setSelectedBooking }) => {
@@ -294,26 +318,19 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
   
   // Notifications Section
   if (activeMenu === 'notifications') {
-    // If there's a specific submenu, render that component
     if (activeSubmenu && NOTIFICATION_SUBMENU_PAGES[activeSubmenu]) {
       const NotificationComponent = NOTIFICATION_SUBMENU_PAGES[activeSubmenu];
       return <NotificationComponent />;
     }
-    // Otherwise render the main NotificationsPage with all features
     return <NotificationsPage />;
   }
   
   // Analytics Section
   if (activeMenu === 'analytics') {
-    console.log('Analytics - Active Submenu:', activeSubmenu);
-    
     if (activeSubmenu && ANALYTICS_SUBMENU_PAGES[activeSubmenu]) {
       const AnalyticsComponent = ANALYTICS_SUBMENU_PAGES[activeSubmenu];
-      console.log('Showing specific analytics component:', activeSubmenu);
       return <AnalyticsComponent />;
     }
-    
-    console.log('Showing main AnalyticsReportsPage');
     return <AnalyticsReportsPage />;
   }
   
@@ -326,7 +343,15 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
     return <AdminRolesPage activeSubmenu={activeSubmenu} />;
   }
   
-  if (activeMenu === 'settings') return <SettingsPage />;
+  // In RightPanel.jsx - Settings Section
+if (activeMenu === 'settings') {
+  if (activeSubmenu && SETTINGS_PAGES[activeSubmenu]) {
+    const SettingsComponent = SETTINGS_PAGES[activeSubmenu];
+    return <SettingsComponent />;
+  }
+  // Pass onNavigate to the main Settings page
+  return <SettingsPage onNavigate={onNavigate} />;
+}
   
   // Fallback for unknown pages
   return (

@@ -475,7 +475,6 @@ export const UserPreferencesControl = () => {
       )
     );
     
-    // Update stats
     const user = users.find(u => u.id === userId);
     if (user && user.status !== formData.status) {
       setStats(prev => {

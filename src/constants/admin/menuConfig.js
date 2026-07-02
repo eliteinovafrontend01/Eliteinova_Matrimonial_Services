@@ -191,6 +191,120 @@ export const menuConfig = [
   },
 ];
 
+// Settings submenu configuration with detailed properties for each setting
+export const settingsSubmenusConfig = [
+  { 
+    id: 'general', 
+    label: 'General Settings', 
+    icon: '⚙️',
+    description: 'Manage basic platform details including app name, logo, company information, and regional settings',
+    fields: [
+      { label: 'App Name', type: 'text', placeholder: 'Wedding Services Platform', name: 'appName' },
+      { label: 'Company Name', type: 'text', placeholder: 'Wedding Services Pvt Ltd', name: 'companyName' },
+      { label: 'Contact Email', type: 'email', placeholder: 'support@weddingservices.com', name: 'contactEmail' },
+      { label: 'Contact Phone', type: 'text', placeholder: '+91 98765 43210', name: 'contactPhone' },
+      { label: 'Time Zone', type: 'select', options: ['IST (UTC+5:30)', 'GMT (UTC+0)', 'EST (UTC-5)', 'PST (UTC-8)'], name: 'timeZone' },
+      { label: 'Default Language', type: 'select', options: ['English', 'Hindi', 'Tamil', 'Telugu', 'Kannada'], name: 'language' }
+    ],
+    features: ['App name & logo management', 'Company information', 'Contact details', 'Time zone & language']
+  },
+  { 
+    id: 'users', 
+    label: 'User Settings', 
+    icon: '👥',
+    description: 'Configure customer-related options including registration, login, and profile settings',
+    toggles: [
+      { label: 'Allow new user registration', key: 'allowRegistration', default: true },
+      { label: 'Enable OTP verification via SMS (Twilio)', key: 'otpVerification', default: true },
+      { label: 'Require email verification', key: 'emailVerification', default: true },
+      { label: 'Allow social login (Google/Facebook)', key: 'socialLogin', default: false }
+    ],
+    features: ['Registration settings', 'OTP verification', 'Profile visibility', 'Login preferences']
+  },
+  { 
+    id: 'vendors', 
+    label: 'Vendor Settings', 
+    icon: '🏢',
+    description: 'Manage vendor-related configurations including registration, verification, and commission',
+    radios: [
+      { name: 'approval', label: 'Manual approval required', value: 'manual', default: true },
+      { name: 'approval', label: 'Auto-approve new vendors', value: 'auto', default: false }
+    ],
+    docs: ['Business Registration Certificate', 'Government ID Proof', 'Address Proof', 'GST Certificate'],
+    features: ['Approval workflow', 'Document requirements', 'Commission settings', 'Verification rules']
+  },
+  { 
+    id: 'payments', 
+    label: 'Payment Settings', 
+    icon: '💰',
+    description: 'Configure payment gateways, currency settings, tax configuration, and refund policies',
+    gateways: ['Razorpay', 'Stripe', 'PayPal'],
+    currency: 'INR (₹)',
+    tax: 18,
+    features: ['Gateway integration', 'Currency & tax', 'Refund policies', 'Payout management']
+  },
+  { 
+    id: 'notifications', 
+    label: 'Notification Settings', 
+    icon: '🔔',
+    description: 'Manage notification services including SMS gateway, email server, and push notifications',
+    smtp: { host: 'smtp.gmail.com', port: '587' },
+    providers: ['Twilio', 'Firebase'],
+    features: ['SMS gateway', 'Email server', 'Push notifications', 'Alert preferences']
+  },
+  { 
+    id: 'kyc', 
+    label: 'KYC & Verification Settings', 
+    icon: '🪪',
+    description: 'Configure verification processes including ID verification and KYC rules',
+    services: ['HyperVerge', 'Signzy'],
+    docs: ['Aadhaar Card', 'PAN Card', 'Passport', 'Voter ID'],
+    features: ['ID verification', 'Document validation', 'Auto-verification', 'Fraud detection']
+  },
+  { 
+    id: 'booking', 
+    label: 'Booking Settings', 
+    icon: '📅',
+    description: 'Customize booking flow including approval process, cancellation rules, and availability settings',
+    toggles: [
+      { label: 'Allow instant booking', key: 'instantBooking', default: true },
+      { label: 'Enable booking cancellation', key: 'cancellationAllowed', default: true },
+      { label: 'Allow rescheduling', key: 'reschedulingAllowed', default: true }
+    ],
+    features: ['Booking flow', 'Cancellation rules', 'Time slots', 'Availability settings']
+  },
+  { 
+    id: 'security', 
+    label: 'Security Settings', 
+    icon: '🔒',
+    description: 'Ensure platform safety with password policies, access control, and login attempt limits',
+    toggles: [
+      { label: 'Require strong password (min 8 chars)', key: 'strongPassword', default: true },
+      { label: 'Password expiry (90 days)', key: 'passwordExpiry', default: true },
+      { label: 'Enforce 2FA for admin accounts', key: 'twoFactorAuth', default: false },
+      { label: 'Enable login attempt limits', key: 'loginAttempts', default: true }
+    ],
+    features: ['Password policies', '2FA enforcement', 'Access control', 'Security logs']
+  },
+  { 
+    id: 'content', 
+    label: 'Content Management Settings', 
+    icon: '📄',
+    description: 'Update static pages including Privacy Policy, Terms & Conditions, About Us, and FAQs',
+    pages: ['Privacy Policy', 'Terms & Conditions', 'About Us', 'FAQs'],
+    features: ['Privacy Policy', 'Terms & Conditions', 'About Us', 'FAQs']
+  },
+  { 
+    id: 'commission', 
+    label: 'Commission & Pricing Settings', 
+    icon: '💎',
+    description: 'Set platform charges including vendor commission, service fees, and subscription plans',
+    plans: ['Silver', 'Gold', 'Diamond'],
+    features: ['Commission rates', 'Service fees', 'Subscription plans', 'Revenue tracking']
+  }
+];
+
+// Dashboard Stats
 export const dashboardStats = [
   { label: 'Total Customers', value: '4,821', icon: '👥', color: 'border-red-500', sub: '+128 this month' },
   { label: 'Total Vendors', value: '326', icon: '🏢', color: 'border-amber-500', sub: '48 pending approval' },
@@ -198,80 +312,6 @@ export const dashboardStats = [
   { label: 'Completed Events', value: '8,432', icon: '✅', color: 'border-blue-500', sub: 'All time' },
   { label: 'Revenue Summary', value: '₹28,45,000', icon: '💰', color: 'border-purple-500', sub: '+12% vs last month' },
   { label: 'Pending Requests', value: '47', icon: '⏳', color: 'border-rose-500', sub: 'Needs review' },
-];
-
-// Notification submenu configuration for easy reference
-export const notificationSubmenusConfig = [
-  { 
-    id: 'multi-channel', 
-    label: 'Multi-Channel Notifications', 
-    icon: '📡', 
-    description: 'Send notifications through Push, SMS, Email, and In-App',
-    features: ['Push Notifications (Mobile App)', 'SMS (OTP & alerts via Twilio)', 'Email Notifications', 'In-app notifications']
-  },
-  { 
-    id: 'event-based', 
-    label: 'Event-Based Notifications', 
-    icon: '⚡', 
-    description: 'Automatically trigger notifications for key activities',
-    features: ['User registration & verification', 'Booking confirmation & updates', 'Payment success or failure', 'Vendor approval or rejection', 'Complaint status updates']
-  },
-  { 
-    id: 'custom-creation', 
-    label: 'Custom Notification Creation', 
-    icon: '✏️', 
-    description: 'Create and send custom messages for promotions and announcements',
-    features: ['Custom title and message', 'Multiple notification types', 'Audience selection', 'Schedule options']
-  },
-  { 
-    id: 'audience-targeting', 
-    label: 'Audience Targeting', 
-    icon: '🎯', 
-    description: 'Send notifications to specific user groups',
-    features: ['All users', 'Customers only', 'Vendors only', 'Selected users']
-  },
-  { 
-    id: 'templates', 
-    label: 'Notification Templates', 
-    icon: '📋', 
-    description: 'Create reusable templates for common messages',
-    features: ['Booking confirmations', 'OTP verification', 'Payment receipts', 'Welcome messages']
-  },
-  { 
-    id: 'scheduling', 
-    label: 'Scheduling Notifications', 
-    icon: '📅', 
-    description: 'Schedule notifications at specific dates and times',
-    features: ['Date and time scheduling', 'Recurring notifications', 'One-time notifications', 'Auto-send options']
-  },
-  { 
-    id: 'real-time', 
-    label: 'Real-Time Alerts', 
-    icon: '🔴', 
-    description: 'Instantly notify users about important updates',
-    features: ['Live feed', 'Priority levels', 'Urgent actions', 'System alerts']
-  },
-  { 
-    id: 'delivery-tracking', 
-    label: 'Delivery Tracking', 
-    icon: '📦', 
-    description: 'Monitor notification status: Sent, Delivered, Failed',
-    features: ['Real-time tracking', 'Delivery rates', 'Channel performance', 'Retry options']
-  },
-  { 
-    id: 'user-preferences', 
-    label: 'User Preferences Control', 
-    icon: '⚙️', 
-    description: 'Manage user notification preferences (opt-in/opt-out)',
-    features: ['Channel preferences', 'Category subscriptions', 'Opt-in/opt-out', 'Global settings']
-  },
-  { 
-    id: 'history-logs', 
-    label: 'History & Logs', 
-    icon: '📜', 
-    description: 'Record of all notifications sent for tracking and auditing',
-    features: ['Audit trail', 'Export options', 'Search & filter', 'User activity logs']
-  },
 ];
 
 // Helper function to get submenus by category
@@ -301,3 +341,27 @@ export const getMenuColor = (menuId) => {
   const menu = menuConfig.find(m => m.id === menuId);
   return menu ? menu.color : 'text-gray-600';
 };
+
+// Helper function to get settings submenu by id
+export const getSettingsSubmenuById = (submenuId) => {
+  return settingsSubmenusConfig.find(s => s.id === submenuId);
+};
+
+// Helper function to get settings submenu by label
+export const getSettingsSubmenuByLabel = (label) => {
+  return settingsSubmenusConfig.find(s => s.label === label);
+};
+
+// Helper function to get all settings submenu labels
+export const getSettingsSubmenuLabels = () => {
+  return settingsSubmenusConfig.map(s => s.label);
+};
+
+// Helper function to get settings submenu ID from label
+export const getSettingsSubmenuIdFromLabel = (label) => {
+  const submenu = settingsSubmenusConfig.find(s => s.label === label);
+  return submenu ? submenu.id : null;
+};
+
+// Export settings submenu labels array for easy access
+export const settingsSubmenuLabels = settingsSubmenusConfig.map(s => s.label);
