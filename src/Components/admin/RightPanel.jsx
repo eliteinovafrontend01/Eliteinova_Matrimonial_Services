@@ -19,7 +19,7 @@ import { GSTVerificationPage } from './vendors/verification/GSTVerificationPage'
 import { IDProofVerificationPage } from './vendors/verification/IDProofVerificationPage';
 import { VerifiedVendorBadgePage } from './vendors/verification/VerifiedVendorBadgePage';
 
-// Category Pages - Import from individual files via index
+// Category Pages
 import { 
   PhotographyPage,
   CateringPage,
@@ -86,7 +86,7 @@ import { ConversionGrowthMetrics } from './analytics/ConversionGrowthMetrics';
 import { CustomReportsGeneration } from './analytics/CustomReportsGeneration';
 import { DataExportOptions } from './analytics/DataExportOptions';
 
-// Admin Roles Pages - Import all role components
+// Admin Roles Pages
 import { AdminRolesPage } from './roles/AdminRolesPage';
 import { RoleCreationManagement } from './roles/RoleCreationManagement';
 import { PermissionBasedAccessControl } from './roles/PermissionBasedAccessControl';
@@ -99,8 +99,20 @@ import { SecureAuthentication } from './roles/SecureAuthentication';
 import { RoleEditingDeactivation } from './roles/RoleEditingDeactivation';
 import { CommonAdminRoles } from './roles/CommonAdminRoles';
 
-// Other Pages
+// Notification Pages
 import { NotificationsPage } from './notifications/NotificationsPage';
+import { MultiChannelNotifications } from './notifications/MultiChannelNotifications';
+import { EventBasedNotifications } from './notifications/EventBasedNotifications';
+import { CustomNotificationCreation } from './notifications/CustomNotificationCreation';
+import { AudienceTargeting } from './notifications/AudienceTargeting';
+import { NotificationTemplates } from './notifications/NotificationTemplates';
+import { SchedulingNotifications } from './notifications/SchedulingNotifications';
+import { RealTimeAlerts } from './notifications/RealTimeAlerts';
+import { DeliveryTracking } from './notifications/DeliveryTracking';
+import { UserPreferencesControl } from './notifications/UserPreferencesControl';
+import { HistoryLogs } from './notifications/HistoryLogs';
+
+// Other Pages
 import { SettingsPage } from './settings/SettingsPage';
 import { menuConfig } from '../../constants/admin/menuConfig';
 
@@ -170,7 +182,6 @@ const COMPLAINT_PAGES = {
   'Reports & Insights': ReportsInsights,
 };
 
-// Analytics Pages - Direct mapping of submenu names to components
 const ANALYTICS_SUBMENU_PAGES = {
   'Dashboard Analytics Overview': DashboardOverviewAnalytics,
   'User & Customer Insights': UserCustomerInsights,
@@ -184,7 +195,6 @@ const ANALYTICS_SUBMENU_PAGES = {
   'Visual Charts & Graphs': DashboardOverviewAnalytics,
 };
 
-// Admin Roles Pages - Mapping for submenu to component
 const ROLES_SUBMENU_PAGES = {
   'Role Creation & Management': RoleCreationManagement,
   'Permission-Based Access Control': PermissionBasedAccessControl,
@@ -196,6 +206,20 @@ const ROLES_SUBMENU_PAGES = {
   'Secure Authentication': SecureAuthentication,
   'Role Editing & Deactivation': RoleEditingDeactivation,
   'Common Admin Roles': CommonAdminRoles,
+};
+
+// Notification Pages Mapping
+const NOTIFICATION_SUBMENU_PAGES = {
+  'Multi-Channel Notifications': MultiChannelNotifications,
+  'Event-Based Notifications': EventBasedNotifications,
+  'Custom Notification Creation': CustomNotificationCreation,
+  'Audience Targeting': AudienceTargeting,
+  'Notification Templates': NotificationTemplates,
+  'Scheduling Notifications': SchedulingNotifications,
+  'Real-Time Alerts': RealTimeAlerts,
+  'Delivery Tracking': DeliveryTracking,
+  'User Preferences Control': UserPreferencesControl,
+  'History & Logs': HistoryLogs,
 };
 
 export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavigate, selectedBooking, setSelectedBooking }) => {
@@ -268,34 +292,40 @@ export const RightPanel = ({ activeMenu, activeSubmenu, onSelectCategory, onNavi
     return <ComplaintsDisputesPage />;
   }
   
+  // Notifications Section
+  if (activeMenu === 'notifications') {
+    // If there's a specific submenu, render that component
+    if (activeSubmenu && NOTIFICATION_SUBMENU_PAGES[activeSubmenu]) {
+      const NotificationComponent = NOTIFICATION_SUBMENU_PAGES[activeSubmenu];
+      return <NotificationComponent />;
+    }
+    // Otherwise render the main NotificationsPage with all features
+    return <NotificationsPage />;
+  }
+  
   // Analytics Section
   if (activeMenu === 'analytics') {
     console.log('Analytics - Active Submenu:', activeSubmenu);
     
-    // If there's a submenu, show the specific component
     if (activeSubmenu && ANALYTICS_SUBMENU_PAGES[activeSubmenu]) {
       const AnalyticsComponent = ANALYTICS_SUBMENU_PAGES[activeSubmenu];
       console.log('Showing specific analytics component:', activeSubmenu);
       return <AnalyticsComponent />;
     }
     
-    // If no submenu or submenu not found, show the main AnalyticsReportsPage
     console.log('Showing main AnalyticsReportsPage');
     return <AnalyticsReportsPage />;
   }
   
-  // Admin Roles Section - Updated to handle submenus
+  // Admin Roles Section
   if (activeMenu === 'roles') {
-    // If there's a specific submenu, render that component
     if (activeSubmenu && ROLES_SUBMENU_PAGES[activeSubmenu]) {
       const RoleComponent = ROLES_SUBMENU_PAGES[activeSubmenu];
       return <RoleComponent />;
     }
-    // Otherwise render the main AdminRolesPage with all submenus
     return <AdminRolesPage activeSubmenu={activeSubmenu} />;
   }
   
-  if (activeMenu === 'notifications') return <NotificationsPage />;
   if (activeMenu === 'settings') return <SettingsPage />;
   
   // Fallback for unknown pages
